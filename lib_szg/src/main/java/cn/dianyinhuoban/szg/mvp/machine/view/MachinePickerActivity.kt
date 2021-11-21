@@ -1,0 +1,62 @@
+package cn.dianyinhuoban.szg.mvp.machine.view
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import cn.dianyinhuoban.szg.R
+import cn.dianyinhuoban.szg.mvp.bean.MachineTypeBean
+import com.wareroom.lib_base.mvp.IPresenter
+import com.wareroom.lib_base.ui.BaseActivity
+
+class MachinePickerActivity : BaseActivity<IPresenter?>() {
+    override fun getPresenter(): IPresenter? {
+        return null
+    }
+
+    companion object {
+        fun openMachinePicker(
+            activity: Activity,
+            machineType: MachineTypeBean,
+            checkedIDList: ArrayList<String>,
+            cashBackAmount: String,
+            requestCode: Int
+        ) {
+            val intent = Intent(activity, MachinePickerActivity::class.java)
+            val bundle = Bundle()
+            bundle.putParcelable("type", machineType)
+            bundle.putStringArrayList("checkedIDList", checkedIDList)
+            bundle.putString("cashBackAmount", cashBackAmount)
+            intent.putExtras(bundle)
+            activity.startActivityForResult(intent, requestCode)
+        }
+
+        fun openMachinePicker(
+            fragment: Fragment,
+            machineType: MachineTypeBean,
+            checkedIDList: ArrayList<String>,
+            cashBackAmount: String,
+            requestCode: Int
+        ) {
+            val intent = Intent(fragment.requireContext(), MachinePickerActivity::class.java)
+            val bundle = Bundle()
+            bundle.putParcelable("type", machineType)
+            bundle.putStringArrayList("checkedIDList", checkedIDList)
+            bundle.putString("cashBackAmount", cashBackAmount)
+            intent.putExtras(bundle)
+            fragment.startActivityForResult(intent, requestCode)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.dy_activity_machine_picker)
+        setTitle("机具选择")
+        val machineType = intent?.extras?.getParcelable<MachineTypeBean>("type")
+        val checkedIDList = intent.extras?.getStringArrayList("checkedIDList")
+        val cashBackAmount = intent?.extras?.getString("cashBackAmount", "0.0")
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fl_container, MachinePickerFragment.newInstance(machineType, checkedIDList,cashBackAmount))
+            .commit()
+    }
+}

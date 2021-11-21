@@ -1,0 +1,6 @@
+include ':lib_szg'
+include ':hmdemo'
+include ':lib_tablayout'
+include ':lib_http'
+include ':lib_base'
+rootProject.name = "DY_SZG"

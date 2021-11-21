@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.dianyinhuoban.szg">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-feature android:name="android.hardware.Camera" />
+
+    <application
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/dy_network_security_config">
+        <!--     我的成员(未实名)   -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.me.view.TeamNotCertifiedActivity"
+            android:screenOrientation="portrait" />
+        <!-- 我的成员 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.me.view.TeamActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.order.OrderListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.auth.view.AuthInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.auth.view.AuthResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.auth.view.FaceDetectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.auth.view.RealnameAuthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.MessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.pk.view.WaitConfirmPkActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.pk.view.PkSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.BatchTransferActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.MachineTransferDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.MachineTransferActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.order.OrderResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.order.SubmitOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.AuthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.JiangWuTangActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.order.OrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.pk.view.PkResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.pk.view.PkActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.pk.view.PkListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.pk.view.PkSearchListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity android:name="cn.dianyinhuoban.szg.mvp.setting.view.ChangePasswordActivity" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.EditInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.UserProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.WithdrawActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.SplashActivity"
+            android:screenOrientation="portrait" /><!-- 注册 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.login.view.RegisterActivity"
+            android:screenOrientation="portrait" /> <!-- 登录 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.login.view.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" /> <!-- 重置密码 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.login.view.ResetPasswordActivity"
+            android:screenOrientation="portrait" /> <!-- 首页 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.home.view.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.BankManageActivity"
+            android:screenOrientation="portrait" /> <!-- 分享二维码 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.home.view.ShareQRActivity"
+            android:screenOrientation="portrait" /> <!-- 机具激活交易明细 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.TradeRecordActivity"
+            android:screenOrientation="portrait" /> <!-- 收益 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.IncomeActivity"
+            android:screenOrientation="portrait" /> <!-- 提现 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.me.view.BindBankCardActivity"
+            android:screenOrientation="portrait" /> <!-- 提现成功 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.WithdrawSuccessActivity"
+            android:screenOrientation="portrait" /> <!-- 个人收益明细 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.IncomePersonalDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 团队收益明细 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.IncomeTeamDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 提现明细 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.WithdrawRecordActivity"
+            android:screenOrientation="portrait" /> <!-- 激活返现明细 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.IncomeActivationDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 申领奖励明细 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.IncomePurchaseDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 我的客户 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.me.view.MyClientActivity"
+            android:screenOrientation="portrait" /> <!-- 我的成员 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.me.view.MemberActivity"
+            android:screenOrientation="portrait" /> <!-- 搜索成员 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.me.view.MemberSearchActivity"
+            android:screenOrientation="portrait" /> <!-- 成员详情 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.me.view.MemberInfoActivity"
+            android:screenOrientation="portrait" /> <!-- 机具划拨 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.TransferActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- 成员选择 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.MemberPickerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- 机具选择 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.MachinePickerActivity"
+            android:screenOrientation="portrait" /> <!-- 批量划分 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.TransferMultiActivity"
+            android:screenOrientation="portrait" /> <!-- 划拨成功 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.TransferSuccessActivity"
+            android:screenOrientation="portrait" /> <!-- 扫一扫 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.ScanActivity"
+            android:screenOrientation="portrait" /> <!-- 确认订单 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.order.ConfirmOrderActivity"
+            android:screenOrientation="portrait" /> <!-- 添加收货地址 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.AddShipAddressActivity"
+            android:screenOrientation="portrait" /> <!-- 机具扫码结果列表 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.MachineScanResultActivity"
+            android:screenOrientation="portrait" /> <!-- 划拨记录 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.TransferRecordActivity"
+            android:screenOrientation="portrait" /> <!-- 划拨记录详情 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.machine.view.TransferRecordDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 地址列表 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.order.view.AddressManagerActivity"
+            android:screenOrientation="portrait" /> <!-- WebView -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.WebHtmlActivity"
+            android:screenOrientation="portrait" /> <!-- WebView -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.WebActivity"
+            android:screenOrientation="portrait" /> <!-- PK记录 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.pk.view.PKRecordActivity"
+            android:screenOrientation="portrait" /> <!-- 编辑海报 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.poster.view.PosterEditActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustUnspecified" /> <!-- 素材库 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.poster.view.PosterActivity"
+            android:screenOrientation="portrait" /> <!-- 修改登录密码 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.ChangePayPwdActivity"
+            android:screenOrientation="portrait" /> <!-- 忘记支付密码 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.setting.view.ResetPayPasswordActivity"
+            android:screenOrientation="portrait" />
+        <!--成员收益排行榜-->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.income.view.IncomeTeamRankActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.order.view.ProductDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 商品列表 -->
+        <activity
+            android:name="cn.dianyinhuoban.szg.mvp.order.view.ProductListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.dianyinhuoban.szg.payapi.alipay.AlipayActivity"
+            android:screenOrientation="portrait" />
+        <service
+            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:label="dexopt"
+            android:process=":dexopt" >
+        </service>
+    </application>
+
+</manifest>

@@ -89,7 +89,7 @@ dependencies {
     implementation rootProject.ext.deps.okhttp3Logging
 
     implementation project(':lib_szg_base')
-    implementation project(':lib_http')
+    implementation project(':lib_szg_http')
     implementation project(':lib_tablayout')
 
 //    implementation 'io.github.sirll:lib_base:1.0.5'

@@ -218,7 +218,6 @@ class UserProfileActivity : BaseActivity<ProfilePresenter>(), ProfileContract.Vi
 
                 override fun onNext(t: UploadResultBean) {
                     super.onNext(t)
-                    Log.d("UPLOAD", t.url)
                     mPresenter.updateAvatar(t.url)
                 }
             })

@@ -11,6 +11,7 @@ import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.mvp.auth.contract.AuthContract
 import cn.dianyinhuoban.szg.mvp.auth.presenter.AuthPresenter
 import cn.dianyinhuoban.szg.mvp.bean.UploadResultBean
+import cn.dianyinhuoban.szg.mvp.home.view.HomeActivity
 import cn.dianyinhuoban.szg.mvp.upload.FileModel
 import cn.dianyinhuoban.szg.util.CoilEngine
 import coil.load
@@ -20,7 +21,9 @@ import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.listener.OnResultCallbackListener
 import com.wareroom.lib_base.ui.BaseActivity
+import com.wareroom.lib_base.utils.AppManager
 import com.wareroom.lib_base.utils.ValidatorUtils
+import com.wareroom.lib_base.utils.cache.MMKVUtil
 import com.wareroom.lib_http.CustomResourceSubscriber
 import com.wareroom.lib_http.exception.ApiException
 import com.wareroom.lib_http.response.ResponseTransformer
@@ -34,6 +37,15 @@ class RealnameAuthActivity : BaseActivity<AuthPresenter?>(), AuthContract.View {
         const val RC_UPLOAD_POSITIVE = 1
         const val RC_UPLOAD_NEGATIVE = 2
 
+        @JvmStatic
+        fun open(context: Context, token: String) {
+            val intent = Intent(context, RealnameAuthActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("token", token)
+            intent.putExtras(bundle)
+            context.startActivity(intent)
+        }
+
         fun open(context: Context) {
             var intent = Intent(context, RealnameAuthActivity::class.java)
             context.startActivity(intent)
@@ -42,6 +54,7 @@ class RealnameAuthActivity : BaseActivity<AuthPresenter?>(), AuthContract.View {
 
     private var positiveURL: String? = null
     private var negativeURL: String? = null
+    private var token: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +64,11 @@ class RealnameAuthActivity : BaseActivity<AuthPresenter?>(), AuthContract.View {
         tv_realname_next.setOnClickListener {
             submitAuth()
         }
+    }
+
+    override fun handleIntent(bundle: Bundle?) {
+        super.handleIntent(bundle)
+        token = bundle?.getString("token")
     }
 
     private fun setupAction() {
@@ -201,7 +219,13 @@ class RealnameAuthActivity : BaseActivity<AuthPresenter?>(), AuthContract.View {
     private fun submitAuth() {
         val name = ed_name.text.toString()
         val idCard = ed_id_card.text.toString()
-        mPresenter?.submitAuth(name, idCard, positiveURL ?: "", negativeURL ?: "")
+        mPresenter?.submitAuth(
+            token ?: MMKVUtil.getToken(),
+            name,
+            idCard,
+            positiveURL ?: "",
+            negativeURL ?: ""
+        )
     }
 
     override fun onSubmitAuthSuccess() {

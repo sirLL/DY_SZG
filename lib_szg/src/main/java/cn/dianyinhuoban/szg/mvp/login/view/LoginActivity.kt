@@ -11,13 +11,18 @@ import cn.dianyinhuoban.szg.DYHelper
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.event.CloseLoadingEvent
 import cn.dianyinhuoban.szg.event.CloseLoginPageEvent
+import cn.dianyinhuoban.szg.mvp.auth.view.RealnameAuthActivity
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.home.view.HomeActivity
 import cn.dianyinhuoban.szg.mvp.login.contract.LoginContract
 import cn.dianyinhuoban.szg.mvp.login.presenter.LoginPresenter
+import cn.dianyinhuoban.szg.widget.dialog.MessageDialog
 import com.wareroom.lib_base.ui.BaseActivity
+import com.wareroom.lib_base.utils.AppManager
 import com.wareroom.lib_base.utils.ValidatorUtils
 import com.wareroom.lib_base.utils.cache.MMKVUtil
 import kotlinx.android.synthetic.main.dy_activity_login.*
+import kotlinx.android.synthetic.main.dy_activity_setting.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -48,7 +53,7 @@ class LoginActivity : BaseActivity<LoginPresenter?>(), LoginContract.View {
     override fun handleIntent(bundle: Bundle?) {
         super.handleIntent(bundle)
         bundle?.let {
-             showBackBtn = it.getBoolean("showBackBtn", false)
+            showBackBtn = it.getBoolean("showBackBtn", false)
         }
     }
 
@@ -113,10 +118,41 @@ class LoginActivity : BaseActivity<LoginPresenter?>(), LoginContract.View {
     }
 
     override fun onLoginSuccess() {
-        val intent=Intent(DYHelper.ACTION_LOGIN_SUCCESS)
+        val intent = Intent(DYHelper.ACTION_LOGIN_SUCCESS)
         sendBroadcast(intent)
         startActivity(Intent(LoginActivity@ this, HomeActivity::class.java))
         finish()
+    }
+
+    override fun showAuthResult(authResult: AuthResult, token: String) {
+        when (authResult.status) {
+            "2", "0" -> {
+                onLoginSuccess()
+            }
+            else -> {
+                val message = "您尚未完成实名认证，去认证?"
+                val messageDialog = MessageDialog(this)
+                    .setMessage(message)
+                    .setOnConfirmClickListener {
+                        it.dismiss()
+                        val intent = Intent(DYHelper.ACTION_LOGIN_SUCCESS)
+                        sendBroadcast(intent)
+
+                        val homeIntent = Intent(LoginActivity@ this, HomeActivity::class.java)
+                        val realNameIntent =
+                            Intent(LoginActivity@ this, RealnameAuthActivity::class.java)
+                        startActivities(arrayOf(homeIntent, realNameIntent))
+                        finish()
+                    }
+                    .setOnCancelClickListener {
+                        onLoginSuccess()
+                    }
+                messageDialog.setCanceledOnTouchOutside(false)
+                messageDialog.show()
+            }
+        }
+
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

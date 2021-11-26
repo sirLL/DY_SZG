@@ -1,5 +1,6 @@
 package cn.dianyinhuoban.szg.mvp.home.presenter
 
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import com.wareroom.lib_http.CustomResourceSubscriber
 import cn.dianyinhuoban.szg.mvp.bean.SystemItemBean
 import cn.dianyinhuoban.szg.mvp.home.contract.SystemContract
@@ -37,5 +38,32 @@ class SystemPresenter(view: SystemContract.View) :
         }
     }
 
+    override fun fetchAuthResult() {
+        if (!isDestroy) {
+            view?.showLoading(false)
+        }
+        mModel?.let {
+            addDispose(
+                it.fetchAuthResult()
+                    .compose(SchedulerProvider.getInstance().applySchedulers())
+                    .compose(ResponseTransformer.handleResult())
+                    .subscribeWith(object : CustomResourceSubscriber<AuthResult?>() {
+                        override fun onError(exception: ApiException?) {
+                            if (!isDestroy) {
+                                view?.hideLoading()
+                                handleError(exception)
+                            }
+                        }
 
+                        override fun onNext(t: AuthResult) {
+                            super.onNext(t)
+                            if (!isDestroy) {
+                                view?.hideLoading()
+                                view?.bindAuthResult(t)
+                            }
+                        }
+                    })
+            )
+        }
+    }
 }

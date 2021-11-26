@@ -23,5 +23,6 @@ data class OrderBean(
     var purchase_status: String?,
     var realNum: String?,
     var status: String?,
-    var telephone: String?
+    var telephone: String?,
+    var payment_voucher: String?
 )

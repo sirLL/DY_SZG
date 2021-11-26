@@ -16,6 +16,7 @@ class AuthPresenter(view: AuthContract.View) : BasePresenter<AuthModel, AuthCont
     }
 
     override fun submitAuth(
+        token: String,
         name: String,
         idCard: String,
         positiveURL: String,
@@ -26,7 +27,7 @@ class AuthPresenter(view: AuthContract.View) : BasePresenter<AuthModel, AuthCont
                 view?.showLoading()
             }
             addDispose(
-                it.submitAuth(name, idCard, positiveURL, negativeURL)
+                it.submitAuth(token, name, idCard, positiveURL, negativeURL)
                     .compose(SchedulerProvider.getInstance().applySchedulers())
                     .compose(ResponseTransformer.handleResult())
                     .subscribeWith(object : CustomResourceSubscriber<EmptyBean?>() {

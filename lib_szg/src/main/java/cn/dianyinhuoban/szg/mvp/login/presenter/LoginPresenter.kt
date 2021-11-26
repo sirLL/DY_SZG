@@ -1,5 +1,6 @@
 package cn.dianyinhuoban.szg.mvp.login.presenter
 
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import com.wareroom.lib_http.CustomResourceSubscriber
 import cn.dianyinhuoban.szg.mvp.bean.UserBean
 import cn.dianyinhuoban.szg.mvp.login.contract.LoginContract
@@ -43,21 +44,61 @@ class LoginPresenter(view: LoginContract.View) :
 
     private fun handLoginInfo(userBean: UserBean?, password: String) {
         if (!isDestroy) {
-            view?.hideLoading()
             if (userBean != null) {
-                MMKVUtil.saveUserID(userBean.uid)
-                MMKVUtil.saveUserName(userBean.username)
-                MMKVUtil.saveToken(userBean.token)
-                MMKVUtil.savePhone(userBean.phone)
-                MMKVUtil.saveNick(userBean.name)
-                MMKVUtil.saveLoginPassword(password)
-                MMKVUtil.saveInviteCode(userBean.inviteCode)
-                MMKVUtil.saveAvatar(userBean.avatar)
-                view?.hideLoading()
-                view?.onLoginSuccess()
+                if ("1" == userBean.status) {
+                    MMKVUtil.saveUserID(userBean.uid)
+                    MMKVUtil.saveUserName(userBean.username)
+                    MMKVUtil.saveToken(userBean.token)
+                    MMKVUtil.savePhone(userBean.phone)
+                    MMKVUtil.saveNick(userBean.name)
+                    MMKVUtil.saveLoginPassword(password)
+                    MMKVUtil.saveInviteCode(userBean.inviteCode)
+                    MMKVUtil.saveAvatar(userBean.avatar)
+                    fetchAuthResult(userBean.token)
+                } else {
+                    view?.hideLoading()
+                    view?.showMessage("该账号已被冻结")
+                }
             } else {
+                view?.hideLoading()
                 view?.showMessage("获取用户信息失败")
             }
+        }
+    }
+
+    override fun fetchAuthResult(token: String) {
+        if (!isDestroy) {
+            view?.showLoading(false)
+        }
+        mModel?.let {
+            addDispose(
+                it.fetchAuthResult(token)
+                    .compose(SchedulerProvider.getInstance().applySchedulers())
+                    .compose(ResponseTransformer.handleResult())
+                    .subscribeWith(object : CustomResourceSubscriber<AuthResult?>() {
+                        override fun onError(exception: ApiException?) {
+                            if (!isDestroy) {
+                                view?.hideLoading()
+                                handleError(exception)
+                            }
+                        }
+
+                        override fun onNext(t: AuthResult) {
+                            super.onNext(t)
+                            if (!isDestroy) {
+                                view?.hideLoading()
+                                when (t.status) {
+                                    "2" -> {
+                                        view?.onLoginSuccess()
+                                    }
+                                    else -> {
+                                        view?.showAuthResult(t, token)
+                                    }
+                                }
+                            }
+                        }
+                    })
+            )
         }
     }
 

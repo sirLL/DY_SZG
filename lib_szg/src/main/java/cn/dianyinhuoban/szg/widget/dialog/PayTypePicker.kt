@@ -98,14 +98,14 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
 
     override fun bindPersonalData(personalBean: PersonalBean?) {
         val payTypeData = mutableListOf<PayTypeBean?>()
-        payTypeData.add(
-            PayTypeBean(
-                1,
-                R.drawable.dy_ic_pay_type_balance,
-                "余额支付",
-                personalBean?.total ?: "0"
-            )
-        )
+//        payTypeData.add(
+//            PayTypeBean(
+//                1,
+//                R.drawable.dy_ic_pay_type_balance,
+//                "余额支付",
+//                personalBean?.total ?: "0"
+//            )
+//        )
 
         payTypeData.add(
             PayTypeBean(
@@ -116,11 +116,20 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
             )
         )
 
+//        payTypeData.add(
+//            PayTypeBean(
+//                5,
+//                R.drawable.dy_ic_pay_type_alipay,
+//                "支付宝支付",
+//                "0"
+//            )
+//        )
+
         payTypeData.add(
             PayTypeBean(
-                5,
-                R.drawable.dy_ic_pay_type_alipay,
-                "支付宝支付",
+                6,
+                R.drawable.dy_ic_pay_type_offline,
+                "现金支付",
                 "0"
             )
         )

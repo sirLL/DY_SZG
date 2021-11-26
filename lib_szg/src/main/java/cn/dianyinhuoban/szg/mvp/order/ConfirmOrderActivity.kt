@@ -15,6 +15,7 @@ import cn.dianyinhuoban.szg.mvp.me.presenter.MePresenter
 import cn.dianyinhuoban.szg.mvp.order.contract.CreateOrderContract
 import cn.dianyinhuoban.szg.mvp.order.presenter.CreateOrderPresenter
 import cn.dianyinhuoban.szg.mvp.order.view.AddressManagerActivity
+import cn.dianyinhuoban.szg.mvp.order.view.PayInfoActivity
 import cn.dianyinhuoban.szg.mvp.setting.view.AddShipAddressActivity
 import cn.dianyinhuoban.szg.payapi.alipay.AlipayActivity
 import cn.dianyinhuoban.szg.widget.dialog.BaseBottomPicker
@@ -27,6 +28,8 @@ import com.wareroom.lib_base.utils.DimensionUtils
 import com.wareroom.lib_base.utils.NumberUtils
 import kotlinx.android.synthetic.main.dy_activity_confirm_order.*
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.math.BigDecimal
 
 class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderContract.View {
@@ -79,6 +82,7 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dy_activity_confirm_order)
+        EventBus.getDefault().register(this)
         setTitle("确认订单")
         btn_submit.setOnClickListener {
             submitOrder()
@@ -208,6 +212,10 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
             showToast("请重新选择商品数量")
             return
         }
+        if (mAddress == null) {
+            showToast("请选择收货地址")
+            return
+        }
         if (mPayType == null) {
             showToast("请选择支付方式")
             return
@@ -217,6 +225,19 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
                 showPasswordSubmitOrder()
             } else if (it.id == 5L) {
                 submitOrder("")
+            } else if (it.id == 6L) {
+                val num = NumberUtils.string2BigDecimal(mProductNum)
+                val price = NumberUtils.string2BigDecimal(mProductPrice)
+                val amount =
+                    num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
+                PayInfoActivity.openPayInfoActivity(
+                    this,
+                    amount,
+                    mProductID ?: "",
+                    num.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString(),
+                    mAddress!!.id ?: "",
+                    "6"
+                )
             }
         }
     }
@@ -250,6 +271,10 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
             mProductNum ?: "",
             mAddress?.id ?: "",
             mPayType?.id?.toString() ?: "",
+            "",
+            "",
+            "",
+            "",
             password ?: ""
         )
     }
@@ -270,8 +295,15 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
     private fun onPaySuccess() {
         EventBus.getDefault().post(PaySuccessEvent())
         showToast("支付成功")
+        OrderListActivity.open(this)
         finish()
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun onPaySuccess(event: PaySuccessEvent) {
+        finish()
+    }
+
 
     override fun onSubmitOrderSuccess() {
         onPaySuccess()
@@ -313,5 +345,9 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
         setSubmitEnable()
     }
 
+    override fun onDestroy() {
+        EventBus.getDefault().unregister(this)
+        super.onDestroy()
+    }
 
 }

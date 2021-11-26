@@ -26,9 +26,9 @@ public class QYHelper {
     }
 
     public static void openQYService(Context context, String title) {
-        ConsultSource source = new ConsultSource("", "电银管家客服", "custom information string");
+        ConsultSource source = new ConsultSource("", "盛掌柜客服", "custom information string");
         source.groupId = Config.GROUP_ID;
-        Unicorn.openServiceActivity(context, "电银管家客服", source);
+        Unicorn.openServiceActivity(context, "盛掌柜客服", source);
     }
 
 

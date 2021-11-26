@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_sn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:textColor="@color/c222222"
+        android:textSize="16sp"
+        android:includeFontPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/tv_end_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_cover"
+        app:layout_constraintTop_toTopOf="@id/iv_cover"
+        app:layout_goneMarginEnd="16dp"
+        tools:text="SN:882357325325" />
+
+    <TextView
+        android:id="@+id/tv_end_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:maxLines="1"
+        android:textColor="@color/color_333333"
+        android:textSize="12sp"
+        android:includeFontPadding="false"
+        android:visibility="visible"
+        app:layout_goneMarginTop="4dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_back_money"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@id/tv_sn"
+        app:layout_constraintTop_toBottomOf="@id/tv_sn"
+        tools:text="截至返现时间:" />
+
+    <TextView
+        android:id="@+id/tv_back_money"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:maxLines="1"
+        android:textColor="@color/color_c50018"
+        android:textSize="14sp"
+        android:includeFontPadding="false"
+        tools:text="返现金额:300.00"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_sn"
+        app:layout_constraintTop_toBottomOf="@id/tv_end_date" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/color_999999"
+        android:textSize="12sp"
+        tools:text="入库时间:2021-09-12"
+        app:layout_constraintBottom_toBottomOf="@id/iv_cover"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_sn" />
+</androidx.constraintlayout.widget.ConstraintLayout>

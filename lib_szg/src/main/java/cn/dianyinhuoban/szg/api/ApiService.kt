@@ -143,9 +143,20 @@ interface ApiService {
         @Field("page") page: Int,
     ): Observable<Response<MyMachineBean?>>
 
+    @FormUrlEncoded
+    @POST(URLConfig.URL_MY_MACHINE_NEW)
+    fun fetchMyMachineNew(
+        @Field("machine_type_id") type: String,
+        @Field("status") status: String,
+        @Field("sn") sn: String,
+        @Field("start_time") startTime: String,
+        @Field("end_time") endTime: String,
+        @Field("page") page: Int,
+    ): Observable<Response<MyMachineBeanNew?>>
+
     /**
-     * 账单明细 个人收益/团队收益/激活返现/申领奖励
-     * @param type  1个人收益 2 团队收益 3 激活返现 4 申领奖励
+     * 账单明细 个人收益/团队收益/激活返现/采购奖励
+     * @param type  1个人收益 2 团队收益 3 激活返现 4 采购奖励
      * @param date  日搜索：2021-07-06 月搜索 2021-07
      */
     @FormUrlEncoded
@@ -166,7 +177,7 @@ interface ApiService {
     ): Observable<Response<List<WithdrawRecordBean>?>>
 
     /**
-     * 申领产品列表
+     * 采购产品列表
      */
     @FormUrlEncoded
     @POST(URLConfig.URL_SUBMIT_ORDER_PRODUCT)
@@ -176,8 +187,8 @@ interface ApiService {
     ): Observable<Response<List<PurchaseProductBean>?>>
 
     /**
-     * 发起申领
-     * @param payType 支付方式 1 余额 2 其他（未定）
+     * 发起采购
+     * @param payType 支付方式 1余额，2积分，3支付宝APP支付，4微信 5支付宝WAP支付 6 现金支付
      */
     @FormUrlEncoded
     @POST(URLConfig.URL_SUBMIT_ORDER)
@@ -186,7 +197,11 @@ interface ApiService {
         @Field("num") num: String,
         @Field("addressId") addressID: String,
         @Field("payType") payType: String,
-        @Field("payPassword") password: String,
+        @Field("pay_name") payName: String,
+        @Field("pay_bank_no") bankNo: String,
+        @Field("pay_bank_name") bankName: String,
+        @Field("payment_voucher") voucher: String,
+        @Field("payPassword") password: String
     ): Observable<Response<PayInfoBean?>>
 
 
@@ -268,7 +283,7 @@ interface ApiService {
     ): Observable<Response<List<AddressBean>?>>
 
     /**
-     * 申领记录
+     * 采购记录
      */
     @FormUrlEncoded
     @POST(URLConfig.URL_PURCHASE_RECORD)
@@ -278,7 +293,7 @@ interface ApiService {
     ): Observable<Response<List<OrderBean>?>>
 
     /**
-     *申领记录详情
+     *采购记录详情
      */
     @FormUrlEncoded
     @POST(URLConfig.URL_PURCHASE_RECORD)
@@ -287,7 +302,7 @@ interface ApiService {
     ): Observable<Response<List<OrderBean>?>>
 
     /**
-     * 申领单确认收货
+     * 采购单确认收货
      */
     @FormUrlEncoded
     @POST(URLConfig.URL_CONFIRM_RECEIPT)
@@ -321,6 +336,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST(URLConfig.URL_AUTH_2_INFO)
     fun submitAuth(
+        @Header("uid") token: String,
         @Field("name") name: String,
         @Field("idNum") idCard: String,
         @Field("auth_sfzzm") positiveURL: String,
@@ -332,6 +348,12 @@ interface ApiService {
      */
     @GET(URLConfig.URL_AUTH_RESULT)
     fun fetchAuthResult(): Observable<Response<AuthResult?>>
+
+    /**
+     * 获取实名信息
+     */
+    @GET(URLConfig.URL_AUTH_RESULT)
+    fun fetchAuthResult(@Header("uid") token: String): Observable<Response<AuthResult?>>
 
     /**
      * 我的客户
@@ -448,4 +470,10 @@ interface ApiService {
      */
     @GET(URLConfig.URL_MEMBER_LEVEL_LIST)
     fun fetchMemberLevelList(): Observable<Response<List<MemberLevelBean?>?>>
+
+    /**
+     * 采购收款信息
+     */
+    @GET(URLConfig.URL_OFFLINE_PAY_INFO)
+    fun fetchOfflinePayInfo(): Observable<Response<OfflinePayInfoBean?>>
 }

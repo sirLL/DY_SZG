@@ -7,6 +7,7 @@ import cn.dianyinhuoban.szg.mvp.order.contract.CreateOrderContract
 import com.wareroom.lib_base.mvp.BaseModel
 import com.wareroom.lib_http.response.Response
 import io.reactivex.Observable
+import retrofit2.http.Field
 
 class CreateOrderModel : BaseModel(), CreateOrderContract.Model {
     override fun fetchAddress(page: Int): Observable<Response<List<AddressBean>?>> {
@@ -19,9 +20,23 @@ class CreateOrderModel : BaseModel(), CreateOrderContract.Model {
         num: String,
         addressID: String,
         payType: String,
-        password: String,
+        payName: String,
+        bankNo: String,
+        bankName: String,
+        voucher: String,
+        password: String
     ): Observable<Response<PayInfoBean?>> {
         return mRetrofit.create(ApiService::class.java)
-            .submitPurchaseOrder(productID, num, addressID, payType, password)
+            .submitPurchaseOrder(
+                productID,
+                num,
+                addressID,
+                payType,
+                payName,
+                bankNo,
+                bankName,
+                voucher,
+                password
+            )
     }
 }

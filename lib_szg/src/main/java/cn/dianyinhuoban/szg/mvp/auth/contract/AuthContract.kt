@@ -8,6 +8,7 @@ import io.reactivex.Observable
 interface AuthContract {
     interface Model {
         fun submitAuth(
+            token:String,
             name: String,
             idCard: String,
             positiveURL: String,
@@ -17,6 +18,7 @@ interface AuthContract {
 
     interface Presenter {
         fun submitAuth(
+            token:String,
             name: String,
             idCard: String,
             positiveURL: String,

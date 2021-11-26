@@ -9,12 +9,13 @@ import io.reactivex.Observable
 
 class AuthModel : BaseModel(), AuthContract.Model {
     override fun submitAuth(
+        token: String,
         name: String,
         idCard: String,
         positiveURL: String,
         negativeURL: String
     ): Observable<Response<EmptyBean?>> {
         return mRetrofit.create(ApiService::class.java)
-            .submitAuth(name, idCard, positiveURL, negativeURL)
+            .submitAuth(token, name, idCard, positiveURL, negativeURL)
     }
 }

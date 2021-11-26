@@ -11,6 +11,7 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.wareroom.lib_base.ui.BaseListFragment
 import com.wareroom.lib_base.ui.adapter.SimpleAdapter
+import com.wareroom.lib_base.utils.DateTimeUtils
 import com.wareroom.lib_base.utils.DimensionUtils
 import com.wareroom.lib_base.utils.NumberUtils
 import kotlinx.android.synthetic.main.dy_item_pos_order.view.*
@@ -75,7 +76,38 @@ class OrderListFragment : BaseListFragment<OrderBean, OrderListPresenter?>(),
         viewHolder?.itemView?.tv_order_product?.text = itemData?.machineName ?: "--"
         viewHolder?.itemView?.tv_order_price?.text = "¥${NumberUtils.formatMoney(itemData?.price)}"
         viewHolder?.itemView?.tv_order_count?.text = "x${itemData?.num}"
-
+        //支付方式 1余额，2积分，3支付宝APP支付，4微信 5支付宝WAP支付 6 现金支付
+        viewHolder?.itemView?.tv_pay_type?.text = when (itemData?.payType) {
+            "1" -> {
+                "支付方式:余额"
+            }
+            "2" -> {
+                "支付方式:积分"
+            }
+            "3" -> {
+                "支付方式:支付宝APP支付"
+            }
+            "4" -> {
+                "支付方式:微信"
+            }
+            "5" -> {
+                "支付方式:支付宝WAP支付"
+            }
+            "6" -> {
+                "支付方式:现金支付"
+            }
+            else -> {
+                ""
+            }
+        }
+        viewHolder?.itemView?.tv_date?.text = if (itemData?.inputTime.isNullOrBlank()) {
+            ""
+        } else {
+            DateTimeUtils.formatDate(
+                itemData?.inputTime?.toLong()!! * 1000,
+                DateTimeUtils.PATTERN_YYYY_MM_DD_HH_MM_SS
+            )
+        }
         val num = NumberUtils.string2BigDecimal(itemData?.num)
         val price = NumberUtils.string2BigDecimal(itemData?.price)
         val amount = num.multiply(price)
@@ -92,7 +124,7 @@ class OrderListFragment : BaseListFragment<OrderBean, OrderListPresenter?>(),
 
     override fun onItemClick(data: OrderBean?, position: Int) {
         data.let {
-//            OrderDetailActivity.open(requireContext(), data?.id)
+            OrderDetailActivity.open(requireContext(), data?.id)
         }
 
     }
@@ -103,13 +135,19 @@ class OrderListFragment : BaseListFragment<OrderBean, OrderListPresenter?>(),
                 "未支付"
             }
             "2" -> {
-                "未发货"
+                "待发货"
             }
             "3" -> {
-                "已填写快递单号"
+                "待确认"
             }
             "4" -> {
                 "已完成"
+            }
+            "5" -> {
+                "支付审核中"
+            }
+            "6" -> {
+                "支付审核未通过"
             }
             "-1" -> {
                 "已退款"
@@ -133,6 +171,12 @@ class OrderListFragment : BaseListFragment<OrderBean, OrderListPresenter?>(),
             }
             "4" -> {
                 ContextCompat.getColor(requireContext(), R.color.color_999999)
+            }
+            "5" -> {
+                ContextCompat.getColor(requireContext(), R.color.color_999999)
+            }
+            "6" -> {
+                ContextCompat.getColor(requireContext(), R.color.color_f60e36)
             }
             "-1" -> {
                 ContextCompat.getColor(requireContext(), R.color.color_f60e36)

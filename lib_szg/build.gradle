@@ -88,7 +88,7 @@ dependencies {
     implementation rootProject.ext.deps.adapterRxJava
     implementation rootProject.ext.deps.okhttp3Logging
 
-    implementation project(':lib_base')
+    implementation project(':lib_szg_base')
     implementation project(':lib_http')
     implementation project(':lib_tablayout')
 

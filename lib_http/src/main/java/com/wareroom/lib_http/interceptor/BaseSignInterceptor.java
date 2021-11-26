@@ -48,7 +48,9 @@ public abstract class BaseSignInterceptor implements Interceptor {
         Map<String, String> headerParam = getHeaderParam();
         if (headerParam != null && headerParam.size() > 0) {
             for (Map.Entry<String, String> entry : headerParam.entrySet()) {
-                requestBuilder.addHeader(entry.getKey(), entry.getValue());
+                if (!request.headers().names().contains(entry.getKey())) {
+                    requestBuilder.addHeader(entry.getKey(), entry.getValue());
+                }
             }
         }
 

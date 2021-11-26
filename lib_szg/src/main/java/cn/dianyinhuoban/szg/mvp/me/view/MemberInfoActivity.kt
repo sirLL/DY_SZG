@@ -5,10 +5,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import androidx.core.content.ContextCompat
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.mvp.bean.MemberDetailBean
+import cn.dianyinhuoban.szg.mvp.bean.TeamMemberBean
 import cn.dianyinhuoban.szg.mvp.machine.view.MachineTransferActivity
+import cn.dianyinhuoban.szg.mvp.machine.view.TransferActivity
 import cn.dianyinhuoban.szg.mvp.me.contract.MemberInfoContract
 import cn.dianyinhuoban.szg.mvp.me.presenter.MemberInfoPresenter
 import cn.dianyinhuoban.szg.mvp.me.view.adapter.MemberBarchartAdapter
@@ -22,6 +25,7 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 import com.wareroom.lib_base.ui.BaseActivity
 import com.wareroom.lib_base.utils.DateTimeUtils
 import com.wareroom.lib_base.utils.NumberUtils
+import com.wareroom.lib_base.utils.cache.MMKVUtil
 import kotlinx.android.synthetic.main.dy_activity_member_info.*
 import java.math.BigDecimal
 import java.util.*
@@ -32,12 +36,15 @@ class MemberInfoActivity : BaseActivity<MemberInfoPresenter?>(), MemberInfoContr
     private var mMemberID: String? = null
     private var mDatePicker: DatePicker? = null
     private var mCheckedDate: Date? = null
+    private var mMemberDetailBean: MemberDetailBean? = null
+    private var mNonActive: String? = null
 
     companion object {
-        fun openMemberInfoActivity(context: Context, memberID: String) {
+        fun openMemberInfoActivity(context: Context, memberID: String, nonActive: String) {
             val intent = Intent(context, MemberInfoActivity::class.java)
             val bundle = Bundle()
             bundle.putString("memberID", memberID)
+            bundle.putString("nonActive", nonActive)
             intent.putExtras(bundle)
             context.startActivity(intent)
         }
@@ -46,6 +53,7 @@ class MemberInfoActivity : BaseActivity<MemberInfoPresenter?>(), MemberInfoContr
     override fun handleIntent(bundle: Bundle?) {
         super.handleIntent(bundle)
         mMemberID = bundle?.getString("memberID", "")
+        mNonActive = bundle?.getString("nonActive", "0")
     }
 
     override fun getPresenter(): MemberInfoPresenter? {
@@ -58,14 +66,26 @@ class MemberInfoActivity : BaseActivity<MemberInfoPresenter?>(), MemberInfoContr
         setTitle("成员详情")
         setupRefreshLayout()
         setupRecyclerView()
-
+        tv_transfer.visibility = if (MMKVUtil.getUserID() == mMemberID) {
+            View.INVISIBLE
+        } else {
+            View.VISIBLE
+        }
         tv_transfer.setOnClickListener {
-            startActivity(Intent(MemberInfoActivity@ this, MachineTransferActivity::class.java))
+            mMemberDetailBean?.let { memberDetail ->
+                val member = TeamMemberBean(
+                    memberDetail.avatar, memberDetail?.name, "",
+                    memberDetail.uid, memberDetail?.username, memberDetail.inviteNum,
+                    "", memberDetail.machineTotal, memberDetail.machineActive, "", mNonActive ?: "0"
+                )
+                TransferActivity.open(MemberInfoActivity@ this, member)
+            }
         }
 
         tv_time.setOnClickListener {
             showDatePicker()
         }
+
         onDateChecked(Date())
     }
 
@@ -152,8 +172,10 @@ class MemberInfoActivity : BaseActivity<MemberInfoPresenter?>(), MemberInfoContr
     }
 
     private fun fetchData() {
-        mPresenter?.fetchMemberDetail(mMemberID ?: "",
-            DateTimeUtils.formatDate(mCheckedDate?.time!!, "yyyy-MM"))
+        mPresenter?.fetchMemberDetail(
+            mMemberID ?: "",
+            DateTimeUtils.formatDate(mCheckedDate?.time!!, "yyyy-MM")
+        )
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
@@ -161,6 +183,7 @@ class MemberInfoActivity : BaseActivity<MemberInfoPresenter?>(), MemberInfoContr
     }
 
     override fun bindMemberDetail(memberDetail: MemberDetailBean?) {
+        mMemberDetailBean = memberDetail
         refresh_layout.finishRefresh()
         mAdapter?.data = memberDetail?.purchaseList
 
@@ -178,7 +201,7 @@ class MemberInfoActivity : BaseActivity<MemberInfoPresenter?>(), MemberInfoContr
         tv_member_count.text = memberDetail?.inviteNum ?: ""
         tv_no.text = memberDetail?.teamRank ?: ""
 
-        tv_amount_personal.text = NumberUtils.formatMoney(memberDetail?.weekTrans)
+        tv_amount_personal.text = NumberUtils.formatMoney(memberDetail?.dailyTrans)
         tv_amount_activation.text = NumberUtils.formatMoney(memberDetail?.monthTrans)
 
         tv_amount_machine.text = memberDetail?.machineActive ?: "--"

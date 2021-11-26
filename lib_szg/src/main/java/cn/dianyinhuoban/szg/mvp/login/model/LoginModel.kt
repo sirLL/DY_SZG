@@ -1,6 +1,7 @@
 package cn.dianyinhuoban.szg.mvp.login.model
 
 import cn.dianyinhuoban.szg.api.ApiService
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.bean.UserBean
 import cn.dianyinhuoban.szg.mvp.login.contract.LoginContract
 import com.wareroom.lib_base.mvp.BaseModel
@@ -13,6 +14,11 @@ class LoginModel : BaseModel(),
     override fun submitLogin(userName: String, password: String): Observable<Response<UserBean?>> {
         return mRetrofit.create(ApiService::class.java)
             .submitLogin(userName, password)
+    }
+
+    override fun fetchAuthResult(token: String): Observable<Response<AuthResult?>> {
+        return mRetrofit.create(ApiService::class.java)
+            .fetchAuthResult(token)
     }
 
 }

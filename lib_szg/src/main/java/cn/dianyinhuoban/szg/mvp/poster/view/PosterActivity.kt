@@ -7,6 +7,7 @@ import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.mvp.bean.PosterTypeBean
 import cn.dianyinhuoban.szg.mvp.poster.contract.PosterTypeContract
 import cn.dianyinhuoban.szg.mvp.poster.presenter.PosterTypePresenter
+import cn.dianyinhuoban.szg.mvp.setting.view.JiangWuTangFragment
 import com.wareroom.lib_base.ui.BaseActivity
 import kotlinx.android.synthetic.main.dy_activity_poster.*
 
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.dy_activity_poster.*
 class PosterActivity : BaseActivity<PosterTypePresenter?>(), PosterTypeContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTitle("素材库")
+        setTitle("讲武堂")
         setContentView(R.layout.dy_activity_poster)
         mPresenter?.fetchPosterType()
     }
@@ -38,6 +39,8 @@ class PosterActivity : BaseActivity<PosterTypePresenter?>(), PosterTypeContract.
                 }
             }
         }
+        titles.add("讲武堂")
+        fragmentList.add(JiangWuTangFragment.newInstance())
 
         if (titles.size > 0) {
             val titleArr = arrayOfNulls<String>(titles.size)

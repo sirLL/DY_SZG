@@ -17,7 +17,11 @@ interface CreateOrderContract {
             num: String,
             addressID: String,
             payType: String,
-            password: String,
+            payName: String,
+            bankNo: String,
+            bankName: String,
+            voucher: String,
+            password: String
         ): Observable<Response<PayInfoBean?>>
     }
 
@@ -29,7 +33,11 @@ interface CreateOrderContract {
             num: String,
             addressID: String,
             payType: String,
-            password: String,
+            payName: String,
+            bankNo: String,
+            bankName: String,
+            voucher: String,
+            password: String
         )
     }
 

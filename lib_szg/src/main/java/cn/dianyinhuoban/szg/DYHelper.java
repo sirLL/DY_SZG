@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.hjq.toast.ToastUtils;
 import com.tencent.mmkv.MMKV;
 import com.wareroom.lib_base.net.RetrofitServiceManager;
+import com.wareroom.lib_base.utils.AppManager;
 import com.wareroom.lib_base.utils.cache.MMKVUtil;
 import com.wareroom.lib_http.exception.ApiException;
 import com.wareroom.lib_http.response.ResponseTransformer;
@@ -16,10 +17,13 @@ import com.wareroom.lib_http.schedulers.SchedulerProvider;
 import com.wareroom.lib_http.CustomResourceSubscriber;
 
 import cn.dianyinhuoban.szg.api.ApiService;
+import cn.dianyinhuoban.szg.mvp.auth.view.RealnameAuthActivity;
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult;
 import cn.dianyinhuoban.szg.mvp.bean.UserBean;
 import cn.dianyinhuoban.szg.mvp.home.view.HomeActivity;
 import cn.dianyinhuoban.szg.mvp.login.view.LoginActivity;
 import cn.dianyinhuoban.szg.qiyu.QYHelper;
+import cn.dianyinhuoban.szg.widget.dialog.MessageDialog;
 
 public class DYHelper {
     public static final String ACTION_LOGIN_SUCCESS = "action.DYHM.LOGIN_SUCCESS";
@@ -54,7 +58,7 @@ public class DYHelper {
                             MMKVUtil.saveLoginPassword(password);
                             MMKVUtil.saveInviteCode(userBean.getInviteCode());
                             MMKVUtil.saveAvatar(userBean.getAvatar());
-                            context.startActivity(new Intent(context, HomeActivity.class));
+                            fetchAuthResult(context, userBean.getToken(), null);
                         } else {
                             ToastUtils.show("获取登录信息失败");
                         }
@@ -87,10 +91,7 @@ public class DYHelper {
                             MMKVUtil.saveLoginPassword(password);
                             MMKVUtil.saveInviteCode(userBean.getInviteCode());
                             MMKVUtil.saveAvatar(userBean.getAvatar());
-                            context.startActivity(new Intent(context, HomeActivity.class));
-                            if (callBack != null) {
-                                callBack.onLoginSuccess();
-                            }
+                            fetchAuthResult(context, userBean.getToken(), callBack);
                         } else {
                             if (callBack != null) {
                                 callBack.onLoginError(-1, "获取登录信息失败");
@@ -98,6 +99,60 @@ public class DYHelper {
                         }
                     }
                 });
+    }
+
+    private static void fetchAuthResult(Context context, String token, OnLoginCallBack callBack) {
+        ApiService apiService = RetrofitServiceManager.getInstance().getRetrofit().create(ApiService.class);
+        apiService.fetchAuthResult(token).compose(SchedulerProvider.getInstance().applySchedulers())
+                .compose(ResponseTransformer.handleResult())
+                .subscribeWith(new CustomResourceSubscriber<AuthResult>() {
+                    @Override
+                    public void onError(ApiException exception) {
+                        if (callBack != null) {
+                            callBack.onLoginError(exception == null ? -1 : exception.getCode(), exception == null ? "登录发生了意外" : exception.getDisplayMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(AuthResult authResult) {
+                        super.onNext(authResult);
+                        if (authResult != null) {
+                            if ("2".equals(authResult.getStatus()) || "0".equals(authResult.getStatus())) {
+                                context.startActivity(new Intent(context, HomeActivity.class));
+                                if (callBack != null) {
+                                    callBack.onLoginSuccess();
+                                }
+                            } else {
+                                showRealNameDialog(context, callBack);
+                            }
+                        } else {
+                            showRealNameDialog(context, callBack);
+                        }
+                    }
+                });
+    }
+
+    private static void showRealNameDialog(Context context, OnLoginCallBack callBack) {
+        String message = "您尚未完成实名认证，去认证?";
+        MessageDialog messageDialog = new MessageDialog(context)
+                .setMessage(message)
+                .setOnConfirmClickListener(dialog -> {
+                    dialog.dismiss();
+                    Intent[] intents = new Intent[]{new Intent(context, HomeActivity.class), new Intent(context, RealnameAuthActivity.class)};
+                    context.startActivities(intents);
+                    if (callBack != null) {
+                        callBack.onLoginSuccess();
+                    }
+                })
+                .setOnCancelClickListener(dialog -> {
+                    dialog.dismiss();
+                    context.startActivity(new Intent(context, HomeActivity.class));
+                    if (callBack != null) {
+                        callBack.onLoginSuccess();
+                    }
+                });
+        messageDialog.setCanceledOnTouchOutside(false);
+        messageDialog.show();
     }
 
     //打卡电银泓盟

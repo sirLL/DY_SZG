@@ -131,7 +131,7 @@ class MemberSearchFragment : BaseListFragment<TeamMemberBean, TeamMemberPresente
 
     override fun onItemClick(data: TeamMemberBean?, position: Int) {
         data?.uid?.let {
-            MemberInfoActivity.openMemberInfoActivity(requireContext(), it)
+            MemberInfoActivity.openMemberInfoActivity(requireContext(), it, data?.nonActive ?: "0")
         }
     }
 }

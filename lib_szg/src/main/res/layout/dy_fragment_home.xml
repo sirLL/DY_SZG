@@ -11,6 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_toolbar"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="@dimen/dy_base_toolbar_height">
 
         <ImageView

@@ -32,7 +32,6 @@
             android:layout_centerVertical="true"
             android:textColor="#F60E36"
             android:textSize="14sp"
-            android:visibility="invisible"
             tools:text="代发货" />
 
         <View
@@ -63,7 +62,7 @@
             android:layout_marginTop="17dp"
             android:layout_toRightOf="@id/img_order_thumb"
             android:textColor="@color/color_333333"
-            android:textSize="14sp"
+            android:textSize="16sp"
             tools:text="电银5台" />
 
         <TextView
@@ -87,6 +86,16 @@
             android:textSize="14sp"
             tools:text="X1" />
 
+        <TextView
+            android:id="@+id/tv_pay_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/tv_order_count"
+            android:layout_alignStart="@id/tv_order_product"
+            android:textColor="@color/color_999999"
+            android:text="支付方式:"
+            android:textSize="14sp" />
+
 
         <TextView
             android:id="@+id/tv_order_amount"
@@ -99,6 +108,16 @@
             android:textColor="@color/color_999999"
             android:textSize="14sp"
             tools:text="应付：100101" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/tv_order_amount"
+            android:layout_alignStart="@id/img_order_thumb"
+            android:textColor="@color/color_999999"
+            tools:text="2012-12-09 23:09:31"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 

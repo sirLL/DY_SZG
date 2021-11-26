@@ -114,33 +114,38 @@ class TeamPkFragment : BaseFragment<PKPresenter>(), PKContract.View {
         tv_percent.isSelected = false
 
         val dataList = Collections.emptyList<TeamData>()
-        recycler_view_team_pk.adapter = object : SimpleAdapter<TeamData>(R.layout.dy_item_pk_member) {
+        recycler_view_team_pk.adapter =
+            object : SimpleAdapter<TeamData>(R.layout.dy_item_pk_member) {
 
-            override fun convert(viewHolder: SimpleViewHolder?, position: Int, itemData: TeamData) {
-                viewHolder?.itemView?.tv_name?.text = if (TextUtils.isEmpty(itemData?.name)) {
-                    itemData?.username
-                } else {
-                    itemData?.name
+                override fun convert(
+                    viewHolder: SimpleViewHolder?,
+                    position: Int,
+                    itemData: TeamData
+                ) {
+                    viewHolder?.itemView?.tv_name?.text = if (TextUtils.isEmpty(itemData?.name)) {
+                        itemData?.username
+                    } else {
+                        itemData?.name
+                    }
+                    viewHolder?.itemView?.tv_activation?.text =
+                        if (mCycleData == PersonalPkFragment.CYCLE_DATA_Y) {
+                            itemData?.yesterdayActive ?: "--"
+                        } else {
+                            itemData?.recent7DayActive ?: "--"
+                        }
+                    viewHolder?.itemView?.tv_transaction?.text =
+                        if (mCycleData == PersonalPkFragment.CYCLE_DATA_Y) {
+                            NumberUtils.formatMoney(itemData?.yesterdayPos)
+                        } else {
+                            NumberUtils.formatMoney(itemData?.recently7daysPos)
+                        }
                 }
-                viewHolder?.itemView?.tv_activation?.text =
-                    if (mCycleData == PersonalPkFragment.CYCLE_DATA_Y) {
-                        NumberUtils.formatMoney(itemData?.yesterdayActive)
-                    } else {
-                        NumberUtils.formatMoney(itemData?.recent7DayActive)
-                    }
-                viewHolder?.itemView?.tv_transaction?.text =
-                    if (mCycleData == PersonalPkFragment.CYCLE_DATA_Y) {
-                        NumberUtils.formatMoney(itemData?.yesterdayPos)
-                    } else {
-                        NumberUtils.formatMoney(itemData?.recently7daysPos)
-                    }
-            }
 
-            override fun onItemClick(data: TeamData, position: Int) {
+                override fun onItemClick(data: TeamData, position: Int) {
+
+                }
 
             }
-
-        }
         (recycler_view_team_pk.adapter as SimpleAdapter<TeamData>).setData(dataList)
     }
 
@@ -190,7 +195,13 @@ class TeamPkFragment : BaseFragment<PKPresenter>(), PKContract.View {
 
         tv_left_no.text =
             if (TextUtils.isEmpty(data.myData.rank)) "当前没有排名" else "当前排名:" + data.myData.rank + " 名"
-        tv_left_activation_amount.text = "本月激活额/元：" + data.myData.active
+        tv_left_activation_amount.text = "本月激活量/台：${
+            if (data.myData.active.isNullOrBlank()) {
+                "--"
+            } else {
+                data.myData.active
+            }
+        }"
 
         tv_mine_active.text =
             if (mCycleData.equals(PersonalPkFragment.CYCLE_DATA_Y)) data.myData.yesterday.active else data.myData.recently7days.active
@@ -211,7 +222,13 @@ class TeamPkFragment : BaseFragment<PKPresenter>(), PKContract.View {
             tv_pk_team_name.text = equalData.teamName
             tv_right_name.text = equalData.teamName
 
-            tv_right_activation_amount.text = "本月激活额/元：" + equalData.active
+            tv_right_activation_amount.text = "本月激活量/台：${
+                if (equalData.active.isNullOrBlank()) {
+                    "--"
+                } else {
+                    equalData.active
+                }
+            }"
             tv_right_no.text =
                 if (TextUtils.isEmpty(equalData.rank)) "当前没有排名" else "当前排名:" + equalData.rank + " 名"
 

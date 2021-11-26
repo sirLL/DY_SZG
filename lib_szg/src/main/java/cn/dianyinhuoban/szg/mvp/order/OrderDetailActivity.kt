@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import cn.dianyinhuoban.szg.R
+import cn.dianyinhuoban.szg.mvp.PreviewImageActivity
 import cn.dianyinhuoban.szg.mvp.bean.OrderBean
 import cn.dianyinhuoban.szg.mvp.order.contract.OrderDetailContract
 import cn.dianyinhuoban.szg.mvp.order.presenter.OrderDetailPresenter
+import cn.dianyinhuoban.szg.widget.dialog.MessageDialog
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.tencent.mmkv.MMKV
@@ -17,7 +19,6 @@ import com.wareroom.lib_base.utils.DimensionUtils
 import com.wareroom.lib_base.utils.NumberUtils
 import com.wareroom.lib_base.utils.OSUtils
 import kotlinx.android.synthetic.main.dy_activity_order_detail.*
-import kotlinx.android.synthetic.main.dy_item_pos_order.*
 
 class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailContract.View {
     private var mOrderID: String? = null
@@ -43,11 +44,11 @@ class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailCo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dy_activity_order_detail)
-        setTitle("申领详情")
+        setTitle("采购详情")
         fetchOrder()
 
         btn_submit.setOnClickListener {
-            mPresenter?.submitConfirmReceipt(mOrderID ?: "")
+            confirmReceipt()
         }
         tv_call.setOnClickListener {
             val phone = MMKV.defaultMMKV().decodeString("COMPANY_PHONE", "")
@@ -105,6 +106,23 @@ class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailCo
         } else {
             View.GONE
         }
+
+        fl_voucher.visibility = if ("6" == order?.payType) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        iv_voucher?.load(order?.payment_voucher) {
+            crossfade(true)
+        }
+        iv_voucher?.setOnClickListener {
+            if (!order?.payment_voucher.isNullOrBlank()) {
+                PreviewImageActivity.open(
+                    this,
+                    arrayOf(order?.payment_voucher!!)
+                )
+            }
+        }
     }
 
     private fun getOrderStatusName(status: String): String {
@@ -113,13 +131,19 @@ class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailCo
                 "未支付"
             }
             "2" -> {
-                "未发货"
+                "待发货"
             }
             "3" -> {
-                "已填写快递单号"
+                "待确认"
             }
             "4" -> {
                 "已完成"
+            }
+            "5" -> {
+                "支付审核中"
+            }
+            "6" -> {
+                "支付审核未通过"
             }
             "-1" -> {
                 "已退款"
@@ -139,10 +163,16 @@ class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailCo
                 "请耐心等待，上级正在发货中"
             }
             "3" -> {
-                "上级已发货，请等待到货"
+                "已发货，请等待到货"
             }
             "4" -> {
-                "恭喜您，申领成功"
+                "恭喜您，采购成功"
+            }
+            "5" -> {
+                "支付信息正在审核中，请耐心等待"
+            }
+            "6" -> {
+                "抱歉，支付信息审核未通过"
             }
             "-1" -> {
                 "退款成功"
@@ -167,6 +197,12 @@ class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailCo
             "4" -> {
                 R.drawable.dy_ic_order_state_complete
             }
+            "5" -> {
+                R.drawable.dy_ic_order_state_wait_ship
+            }
+            "6" -> {
+                R.drawable.dy_ic_order_state_fail
+            }
             "-1" -> {
                 R.drawable.dy_ic_order_state_complete
             }
@@ -179,12 +215,37 @@ class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailCo
     private fun getPayTypeName(payType: String): String {
         return when (payType) {
             "1" -> {
-                "余额支付"
+                "余额"
+            }
+            "2" -> {
+                "积分"
+            }
+            "3" -> {
+                "支付宝APP支付"
+            }
+            "4" -> {
+                "微信"
+            }
+            "5" -> {
+                "支付宝WAP支付"
+            }
+            "6" -> {
+                "现金支付"
             }
             else -> {
-                "其他"
+                ""
             }
         }
+    }
+
+    private fun confirmReceipt() {
+        MessageDialog(this)
+            .setTitle("确认收货")
+            .setMessage("您是否已收到机具?")
+            .setOnConfirmClickListener {
+                it.dismiss()
+                mPresenter?.submitConfirmReceipt(mOrderID ?: "")
+            }.show()
     }
 
     override fun onConfirmReceiptSuccess() {

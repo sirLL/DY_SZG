@@ -4,6 +4,7 @@ data class MyMachineBean(
     val activeCount: String,
     val count: String,
     val `data`: List<MachineItemBean>,
-    val nonActiveCount: String
+    val nonActiveCount: String,
+    val unBind: String
 )
 

@@ -49,14 +49,18 @@ class CreateOrderPresenter(view: CreateOrderContract.View) :
         num: String,
         addressID: String,
         payType: String,
-        password: String,
+        payName: String,
+        bankNo: String,
+        bankName: String,
+        voucher: String,
+        password: String
     ) {
         if (!isDestroy) {
             view?.showLoading()
         }
         mModel?.let {
             addDispose(
-                it.submitPurchaseOrder(productID, num, addressID, payType, password)
+                it.submitPurchaseOrder(productID, num, addressID, payType, payName, bankNo, bankName, voucher, password)
                     .compose(SchedulerProvider.getInstance().applySchedulers())
                     .compose(ResponseTransformer.handleResult())
                     .subscribeWith(object : CustomResourceSubscriber<PayInfoBean?>() {

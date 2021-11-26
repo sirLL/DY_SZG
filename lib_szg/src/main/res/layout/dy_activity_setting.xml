@@ -135,6 +135,37 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/el_bank_card_item"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/dy_selector_common_write_click_bg">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="银行卡"
+                android:textColor="@color/color_333333"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/dy_ic_right_arrow" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="15dp"
+                android:background="@color/color_fa" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/el_change_password_item"
             android:layout_width="match_parent"
             android:layout_height="54dp"

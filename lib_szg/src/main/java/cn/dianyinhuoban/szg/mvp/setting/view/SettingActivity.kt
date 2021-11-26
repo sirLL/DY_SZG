@@ -44,6 +44,9 @@ class SettingActivity : BaseActivity<SettingPresenter?>(), SettingContract.View 
         el_change_password_item.setOnClickListener {
             ChangePasswordActivity.open(SettingActivity@ this)
         }
+        el_bank_card_item.setOnClickListener {
+            startActivity(Intent(SettingActivity@ this, BankManageActivity::class.java))
+        }
 
         el_change_pay_password_item.setOnClickListener {
             ChangePayPwdActivity.open(SettingActivity@ this)

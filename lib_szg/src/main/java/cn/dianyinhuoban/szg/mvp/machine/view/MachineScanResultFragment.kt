@@ -158,6 +158,11 @@ class MachineScanResultFragment : BaseListFragment<MachineItemBean, MachineQuery
         viewHolder?.itemView?.iv_delete?.setOnClickListener {
             mAdapter?.data?.removeAt(position)
             mAdapter?.notifyItemRemoved(position)
+            mAdapter?.data?.let {
+                if (position != it.size) {
+                    mAdapter?.notifyItemRangeChanged(position, it.size - position)
+                }
+            }
             setSubmitEnable()
         }
     }

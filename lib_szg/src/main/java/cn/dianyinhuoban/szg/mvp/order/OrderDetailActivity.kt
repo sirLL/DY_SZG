@@ -159,7 +159,7 @@ class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailCo
                 "您尚未付款，请及时付款"
             }
             "2" -> {
-                "请耐心等待，上级正在发货中"
+                "请耐心等待，总部正在发货中"
             }
             "3" -> {
                 "已发货，请等待到货"

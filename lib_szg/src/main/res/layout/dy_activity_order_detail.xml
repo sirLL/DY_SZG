@@ -59,7 +59,7 @@
                     android:layout_marginTop="14dp"
                     android:textColor="@color/color_666666"
                     android:textSize="12sp"
-                    tools:text="请耐心等待，上级正在发货中" />
+                    tools:text="请耐心等待，总部正在发货中" />
             </LinearLayout>
 
 

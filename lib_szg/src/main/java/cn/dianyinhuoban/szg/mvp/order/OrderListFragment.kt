@@ -118,7 +118,6 @@ class OrderListFragment : BaseListFragment<OrderBean, OrderListPresenter?>(),
             crossfade(true)
             placeholder(R.drawable.dy_ic_app_logo)
             error(R.drawable.dy_ic_app_logo)
-            transformations(RoundedCornersTransformation(dp2px3, dp2px3, dp2px3, dp2px3))
         }
     }
 

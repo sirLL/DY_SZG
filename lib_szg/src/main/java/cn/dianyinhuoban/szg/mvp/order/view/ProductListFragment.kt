@@ -62,7 +62,6 @@ class ProductListFragment : BaseListFragment<PurchaseProductBean, ProductListPre
     ) {
         viewHolder?.itemView?.iv_cover?.load(itemData?.img) {
             crossfade(true)
-            transformations(RoundedCornersTransformation(mDp2px6, mDp2px6, mDp2px6, mDp2px6))
         }
         viewHolder?.itemView?.tv_title?.text = itemData?.name ?: "--"
         viewHolder?.itemView?.tv_title_des?.text = itemData?.describe ?: "--"
@@ -71,12 +70,17 @@ class ProductListFragment : BaseListFragment<PurchaseProductBean, ProductListPre
         } else {
             "¥${NumberUtils.formatMoney(itemData?.price)}"
         }
+        viewHolder?.itemView?.iv_buy?.setOnClickListener {
+            itemData?.let {
+                ProductDetailActivity.openProductDetailActivity(requireContext(), itemData)
+            }
+        }
     }
 
     override fun onItemClick(data: PurchaseProductBean?, position: Int) {
-        data?.let {
-            ProductDetailActivity.openProductDetailActivity(requireContext(), data)
-        }
+//        data?.let {
+//            ProductDetailActivity.openProductDetailActivity(requireContext(), data)
+//        }
     }
 
     override fun bindPurchaseProduct(productData: List<PurchaseProductBean>?) {

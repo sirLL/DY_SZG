@@ -86,9 +86,8 @@ class OrderDetailActivity : BaseActivity<OrderDetailPresenter?>(), OrderDetailCo
             crossfade(true)
             placeholder(R.drawable.dy_ic_app_logo)
             error(R.drawable.dy_ic_app_logo)
-            transformations(RoundedCornersTransformation(dp2px3, dp2px3, dp2px3, dp2px3))
         }
-        tv_order_no.text = ""
+        tv_order_no.text = order?.purchaseNo
         tv_order_status.text = getOrderStatusName(order?.status ?: "")
         tv_order_product.text = order?.machineName ?: ""
         tv_order_price.text = "¥${NumberUtils.formatMoney(order?.price)}"

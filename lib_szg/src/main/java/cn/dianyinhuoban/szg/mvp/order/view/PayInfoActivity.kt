@@ -3,6 +3,8 @@ package cn.dianyinhuoban.szg.mvp.order.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -105,6 +107,23 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         btnSubmit?.setOnClickListener {
             submitOrder()
         }
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                setSubmitEnable()
+            }
+
+        }
+        edPayName?.addTextChangedListener(textWatcher)
+        edPayAccount?.addTextChangedListener(textWatcher)
+        edPayBank?.addTextChangedListener(textWatcher)
 
         tvAmount?.text = "${NumberUtils.numberScale(amount)}元"
         mPresenter?.fetchOfflinePayInfo()

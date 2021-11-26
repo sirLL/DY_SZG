@@ -53,11 +53,11 @@ class JiangWuTangFragment : BaseListFragment<JiangWuTangBean, SettingPresenter>(
         }
         viewHolder?.setText(R.id.tv_title, itemData?.title ?: "")
         viewHolder?.setText(
-            R.id.tv_date, if (itemData?.updatetime.isNullOrBlank()) {
+            R.id.tv_date, if (itemData?.inputtime.isNullOrBlank()) {
                 ""
             } else {
                 DateTimeUtils.formatDate(
-                    itemData!!.updatetime.toLong() * 1000,
+                    itemData!!.inputtime.toLong() * 1000,
                     DateTimeUtils.PATTERN_YYYY_MM_DD
                 )
             }

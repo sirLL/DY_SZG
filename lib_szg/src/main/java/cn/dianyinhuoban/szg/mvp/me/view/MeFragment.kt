@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import cn.dianyinhuoban.szg.R
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.bean.MeMenuBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
 import cn.dianyinhuoban.szg.mvp.income.view.IncomeActivity
@@ -26,6 +27,7 @@ import coil.transform.CircleCropTransformation
 import com.wareroom.lib_base.ui.BaseFragment
 import com.wareroom.lib_base.utils.NumberUtils
 import com.wareroom.lib_base.utils.OSUtils
+import kotlinx.android.synthetic.main.dy_activity_home.*
 import kotlinx.android.synthetic.main.dy_fragment_me.*
 import java.util.*
 
@@ -146,6 +148,7 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
 
     override fun onStart() {
         super.onStart()
+        fetchAuthResult()
         fetchPersonalData()
     }
 
@@ -197,6 +200,24 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
             View.GONE
         } else {
             View.VISIBLE
+        }
+    }
+
+    private fun fetchAuthResult() {
+        mPresenter?.fetchAuthResult()
+    }
+
+    override fun bindAuthResult(authResult: AuthResult) {
+        when (authResult.status) {
+            "0" -> {
+                tv_realname_status?.text = "审核中"
+            }
+            "2" -> {
+                tv_realname_status?.text = "已认证"
+            }
+            else -> {
+                tv_realname_status?.text = "未认证"
+            }
         }
     }
 

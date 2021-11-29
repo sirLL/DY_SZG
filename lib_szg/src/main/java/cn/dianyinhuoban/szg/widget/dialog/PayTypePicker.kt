@@ -3,6 +3,7 @@ package cn.dianyinhuoban.szg.widget.dialog
 import android.os.Bundle
 import android.view.View
 import cn.dianyinhuoban.szg.R
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.bean.PayTypeBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
 import cn.dianyinhuoban.szg.mvp.me.contract.MeContract
@@ -136,5 +137,8 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
         loadData(payTypeData)
     }
 
+    override fun bindAuthResult(authResult: AuthResult) {
+
+    }
 
 }

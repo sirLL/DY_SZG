@@ -107,7 +107,7 @@ class RegisterActivity : BaseActivity<RegisterPresenter?>(), RegisterContract.Vi
     }
 
     private fun setupAgreement() {
-        val agreementText = "点击注册，即表示您同意《盛掌柜泓盟版用户协议》"
+        val agreementText = "点击注册，即表示您同意《盛掌柜用户协议》"
         val spannableStringBuilder = SpannableStringBuilder(agreementText)
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
@@ -124,8 +124,8 @@ class RegisterActivity : BaseActivity<RegisterPresenter?>(), RegisterContract.Vi
                 R.color.color_1b68eb
             )
         )
-        spannableStringBuilder.setSpan(clickableSpan, 11, 21, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableStringBuilder.setSpan(colorSpan, 11, 21, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableStringBuilder.setSpan(clickableSpan, 11, 20, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableStringBuilder.setSpan(colorSpan, 11, 20, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         tv_agreement.text = spannableStringBuilder
         tv_agreement.highlightColor = Color.TRANSPARENT;
         tv_agreement.movementMethod = LinkMovementMethod.getInstance();

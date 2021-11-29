@@ -33,6 +33,7 @@ import org.greenrobot.eventbus.ThreadMode
 import java.math.BigDecimal
 
 class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderContract.View {
+    var mMachineType: String = ""
     var mProductName: String? = null
     var mProductImg: String? = null
     var mProductPrice: String? = null
@@ -55,6 +56,7 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
             productImg: String,
             productPrice: String,
             productNum: String,
+            machineType: String
         ) {
             val intent = Intent(context, ConfirmOrderActivity::class.java)
             val bundle = Bundle()
@@ -63,6 +65,7 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
             bundle.putString("productImg", productImg)
             bundle.putString("productPrice", productPrice)
             bundle.putString("productNum", productNum)
+            bundle.putString("machineType", machineType)
             intent.putExtras(bundle)
             context.startActivity(intent)
         }
@@ -71,6 +74,7 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
     override fun handleIntent(bundle: Bundle?) {
         super.handleIntent(bundle)
         bundle?.let {
+            mMachineType = it.getString("machineType", "")
             mProductName = it.getString("productName", "")
             mProductImg = it.getString("productImg", "")
             mProductPrice = it.getString("productPrice", "")
@@ -153,7 +157,7 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
 
     private fun showPayTypePicker() {
         if (mPayTypePicker == null) {
-            mPayTypePicker = PayTypePicker.newInstance()
+            mPayTypePicker = PayTypePicker.newInstance(mMachineType)
             mPayTypePicker?.setOnItemSelectedListener(object :
                 BaseBottomPicker.OnItemSelectedListener<PayTypeBean?, MePresenter> {
                 override fun onItemSelected(

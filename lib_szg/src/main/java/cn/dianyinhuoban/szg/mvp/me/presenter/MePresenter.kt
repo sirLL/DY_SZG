@@ -1,6 +1,7 @@
 package cn.dianyinhuoban.szg.mvp.me.presenter
 
 import cn.dianyinhuoban.szg.mvp.bean.AuthResult
+import cn.dianyinhuoban.szg.mvp.bean.IntegralBalanceBean
 import com.wareroom.lib_http.CustomResourceSubscriber
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
 import cn.dianyinhuoban.szg.mvp.me.contract.MeContract
@@ -65,6 +66,35 @@ class MePresenter(view: MeContract.View) : BasePresenter<MeModel, MeContract.Vie
                             if (!isDestroy) {
                                 view?.hideLoading()
                                 view?.bindAuthResult(t)
+                            }
+                        }
+                    })
+            )
+        }
+    }
+
+    override fun fetchIntegralBalance(machineTypeId: String) {
+        if (!isDestroy) {
+            view?.showLoading(false)
+        }
+        mModel?.let {
+            addDispose(
+                it.fetchIntegralBalance(machineTypeId)
+                    .compose(SchedulerProvider.getInstance().applySchedulers())
+                    .compose(ResponseTransformer.handleResult())
+                    .subscribeWith(object : CustomResourceSubscriber<List<IntegralBalanceBean>?>() {
+                        override fun onError(exception: ApiException?) {
+                            if (!isDestroy) {
+                                view?.hideLoading()
+                                handleError(exception)
+                            }
+                        }
+
+                        override fun onNext(t: List<IntegralBalanceBean>) {
+                            super.onNext(t)
+                            if (!isDestroy) {
+                                view?.hideLoading()
+                                view?.bindIntegralBalance(t)
                             }
                         }
                     })

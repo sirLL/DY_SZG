@@ -1,6 +1,7 @@
 package cn.dianyinhuoban.szg.api
 
 import cn.dianyinhuoban.szg.bean.CustomModel
+import cn.dianyinhuoban.szg.bean.IntegralRecordBean
 import cn.dianyinhuoban.szg.bean.MemberLevelBean
 import cn.dianyinhuoban.szg.mvp.bean.*
 import com.wareroom.lib_http.response.Response
@@ -476,4 +477,25 @@ interface ApiService {
      */
     @GET(URLConfig.URL_OFFLINE_PAY_INFO)
     fun fetchOfflinePayInfo(): Observable<Response<OfflinePayInfoBean?>>
+
+    /**
+     * 积分余额
+     */
+    @FormUrlEncoded
+    @POST(URLConfig.URL_INTEGRAL_BALANCE)
+    fun fetchIntegralBalance(
+        @Field("machineTypeId") machineTypeId: String
+    ): Observable<Response<List<IntegralBalanceBean>?>>
+
+    /**
+     * 积分记录
+     * @param status 1待使用 2 已使用
+     */
+    @FormUrlEncoded
+    @POST(URLConfig.URL_INTEGRAL_RECORD)
+    fun fetchIntegralRecord(
+        @Field("machineTypeId") machineType: String,
+        @Field("status") status: String,
+        @Field("page") page: Int
+    ): Observable<Response<List<IntegralRecordBean>?>>
 }

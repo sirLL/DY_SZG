@@ -26,6 +26,7 @@ import com.qiyukf.unicorn.api.Unicorn
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
 import com.wareroom.lib_base.ui.BaseActivity
+import com.wareroom.lib_base.utils.AppManager
 import kotlinx.android.synthetic.main.dy_activity_home.*
 import java.util.*
 
@@ -177,7 +178,7 @@ class HomeActivity : BaseActivity<SystemPresenter?>(), SystemContract.View {
                     }
                 }
                 .setOnCancelClickListener {
-                    it.dismiss()
+                    AppManager.getInstance().loginOut(HomeActivity@ this)
                 }
             messageDialog.setCanceledOnTouchOutside(false)
             messageDialog.show()

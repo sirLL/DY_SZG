@@ -21,6 +21,9 @@
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/dy_network_security_config">
         <activity
+            android:name=".mvp.income.view.IntegralRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".mvp.PreviewImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Activity_trans" />

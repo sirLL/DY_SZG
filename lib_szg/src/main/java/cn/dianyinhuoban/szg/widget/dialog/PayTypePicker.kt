@@ -1,9 +1,12 @@
 package cn.dianyinhuoban.szg.widget.dialog
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.mvp.bean.AuthResult
+import cn.dianyinhuoban.szg.mvp.bean.IntegralBalanceBean
 import cn.dianyinhuoban.szg.mvp.bean.PayTypeBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
 import cn.dianyinhuoban.szg.mvp.me.contract.MeContract
@@ -14,16 +17,18 @@ import com.wareroom.lib_base.utils.NumberUtils
 import kotlinx.android.synthetic.main.dy_item_pay_type_picker.view.*
 
 class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.View {
-    private var mCheckedPosition = -1
-
     companion object {
-        fun newInstance(): PayTypePicker {
+        fun newInstance(machineType: String): PayTypePicker {
             val args = Bundle()
+            args.putString("machineType", machineType)
             val fragment = PayTypePicker()
             fragment.arguments = args
             return fragment
         }
     }
+
+    private var mCheckedPosition = -1
+    private var machineType: String = ""
 
     override fun getTitle(): String {
         return "选择支付方式"
@@ -39,6 +44,15 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
 
     override fun getPresenter(): MePresenter {
         return MePresenter(this)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        machineType = arguments?.getString("machineType", "") ?: ""
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onStart() {
@@ -59,7 +73,7 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
                     "当前余额：¥${NumberUtils.formatMoney(itemData.balance)}"
                 }
                 2L -> {
-                    "当前积分：¥${NumberUtils.formatMoney(itemData.balance)}"
+                    "当前积分：¥${itemData.balance}"
                 }
                 else -> {
                     ""
@@ -95,9 +109,14 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
 
     override fun request(page: Int) {
         mPresenter?.fetchPersonalData()
+        mPresenter?.fetchIntegralBalance(machineType)
     }
 
     override fun bindPersonalData(personalBean: PersonalBean?) {
+
+    }
+
+    override fun bindIntegralBalance(data: List<IntegralBalanceBean>?) {
         val payTypeData = mutableListOf<PayTypeBean?>()
 //        payTypeData.add(
 //            PayTypeBean(
@@ -107,13 +126,20 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
 //                personalBean?.total ?: "0"
 //            )
 //        )
-
+        var integralBalanceBean: IntegralBalanceBean? = null
+        data?.let {
+            for (bean in it) {
+                if (machineType == bean.machineTypeId) {
+                    integralBalanceBean = bean
+                }
+            }
+        }
         payTypeData.add(
             PayTypeBean(
                 2,
                 R.drawable.dy_ic_pay_type_integral,
                 "积分支付",
-                personalBean?.point ?: "0"
+                integralBalanceBean?.point ?: "0"
             )
         )
 

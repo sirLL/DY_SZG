@@ -197,6 +197,12 @@ interface URLConfig {
         //线下支付收款账号
         const val URL_OFFLINE_PAY_INFO = "machineNew_receiverInfo.html"
 
+        //积分
+        const val URL_INTEGRAL_BALANCE = "machinenew_memberPoint.html"
+
+        //积分记录
+        const val URL_INTEGRAL_RECORD = "machinenew_pointLog.html"
+
 
     }
 

@@ -29,12 +29,13 @@ class OrderListActivity : BaseActivity<IPresenter?>() {
         var fragments = ArrayList<Fragment>()
         fragments.add(OrderListFragment.newInstance(""))
         fragments.add(OrderListFragment.newInstance("2"))
+        fragments.add(OrderListFragment.newInstance("5"))
         fragments.add(OrderListFragment.newInstance("3"))
         fragments.add(OrderListFragment.newInstance("4"))
 
         tab_order.setViewPager(
             vp_order,
-            arrayOf("全部", "待发货", "待确认", "已完成"),
+            arrayOf("全部", "待发货", "待审核", "待确认", "已完成"),
             OrderListActivity@ this,
             fragments
         )

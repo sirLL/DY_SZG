@@ -1,6 +1,7 @@
 package cn.dianyinhuoban.szg.mvp.order.view
 
 import android.os.Bundle
+import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import cn.dianyinhuoban.szg.R
@@ -63,8 +64,28 @@ class ProductListFragment : BaseListFragment<PurchaseProductBean, ProductListPre
         viewHolder?.itemView?.iv_cover?.load(itemData?.img) {
             crossfade(true)
         }
-        viewHolder?.itemView?.tv_title?.text = itemData?.name ?: "--"
-        viewHolder?.itemView?.tv_title_des?.text = itemData?.describe ?: "--"
+        val title = StringBuffer()
+        if (!itemData?.act_cashback.isNullOrBlank()) {
+            title.append("激活奖&thinsp;<font color='red'> ${itemData?.act_cashback}元</font>")
+        }
+        if (!itemData?.back_point.isNullOrBlank()) {
+            if (title.isNotBlank()) {
+                title.append("&thinsp;+&thinsp;")
+            }
+            title.append("<font color='red'>${itemData?.back_point}</font>&thinsp;购机积分")
+        }
+        if (!itemData?.back_point.isNullOrBlank()) {
+            if (title.isNotBlank()) {
+                title.append("<br/>")
+            }
+            title.append("达标奖&thinsp;<font color='red'>${itemData?.standard_cashback}</font>&thinsp;元")
+        }
+        viewHolder?.itemView?.tv_title?.text = Html.fromHtml(title.toString())
+        viewHolder?.itemView?.tv_title_des?.text = if (itemData?.set_meal.isNullOrBlank()) {
+            ""
+        } else {
+            "${itemData?.set_meal}台包"
+        }
         viewHolder?.itemView?.tv_price?.text = if (TextUtils.isEmpty(itemData?.price)) {
             "--"
         } else {
@@ -72,7 +93,11 @@ class ProductListFragment : BaseListFragment<PurchaseProductBean, ProductListPre
         }
         viewHolder?.itemView?.iv_buy?.setOnClickListener {
             itemData?.let {
-                ProductDetailActivity.openProductDetailActivity(requireContext(), itemData)
+                ProductDetailActivity.openProductDetailActivity(
+                    requireContext(),
+                    mTypeID ?: "",
+                    itemData
+                )
             }
         }
     }

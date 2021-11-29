@@ -6,12 +6,13 @@ import android.text.TextUtils
 import android.view.View
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.mvp.bean.AuthResult
+import cn.dianyinhuoban.szg.mvp.bean.IntegralBalanceBean
 import cn.dianyinhuoban.szg.mvp.bean.MeMenuBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
 import cn.dianyinhuoban.szg.mvp.income.view.IncomeActivity
+import cn.dianyinhuoban.szg.mvp.income.view.IntegralRecordActivity
 import cn.dianyinhuoban.szg.mvp.income.view.WithdrawActivity
 import cn.dianyinhuoban.szg.mvp.machine.view.MachineManagerActivity
-import cn.dianyinhuoban.szg.mvp.machine.view.MachineTransferActivity
 import cn.dianyinhuoban.szg.mvp.me.contract.MeContract
 import cn.dianyinhuoban.szg.mvp.me.presenter.MePresenter
 import cn.dianyinhuoban.szg.mvp.me.view.adapter.MeMenuAdapter
@@ -90,6 +91,18 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
             }
 
         }
+        tv_integral_left_title?.setOnClickListener {
+            val tag: String = it.getTag(R.id.dy_tv_tag) as String
+            if (!tag.isNullOrBlank()) {
+                IntegralRecordActivity.open(requireContext(), tag)
+            }
+        }
+        tv_integral_right_title?.setOnClickListener {
+            val tag: String = it.getTag(R.id.dy_tv_tag) as String
+            if (!tag.isNullOrBlank()) {
+                IntegralRecordActivity.open(requireContext(), tag)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -150,6 +163,7 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
         super.onStart()
         fetchAuthResult()
         fetchPersonalData()
+        fetchIntegralBalance()
     }
 
     private fun fetchPersonalData() {
@@ -190,8 +204,6 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
             } else {
                 it.teamName
             }
-            tv_integral.text = NumberUtils.formatMoney(it.point)
-
 
             tv_parent_name.text = it.parentName ?: ""
             tv_parent_phone.text = it.parentPhone ?: ""
@@ -217,6 +229,89 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
             }
             else -> {
                 tv_realname_status?.text = "未认证"
+            }
+        }
+    }
+
+    private fun fetchIntegralBalance() {
+        mPresenter?.fetchIntegralBalance("")
+    }
+
+    override fun bindIntegralBalance(data: List<IntegralBalanceBean>?) {
+        if (data.isNullOrEmpty()) {
+            tv_integral_left_title?.visibility = View.GONE
+            tv_integral_right_title?.visibility = View.GONE
+            tv_integral_left?.visibility = View.GONE
+            tv_integral_right?.visibility = View.GONE
+        } else {
+            var leftBean: IntegralBalanceBean? = null
+            var rightBean: IntegralBalanceBean? = null
+            for (bean in data) {
+                if (leftBean == null) {
+                    leftBean = bean
+                } else if (rightBean == null) {
+                    rightBean = bean
+                } else {
+                    break
+                }
+            }
+            tv_integral_left_title?.visibility = if (leftBean == null) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            tv_integral_right_title?.visibility = if (rightBean == null) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            tv_integral_left?.visibility = if (leftBean == null) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            tv_integral_right?.visibility = if (rightBean == null) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            //积分标题
+            tv_integral_left_title?.text = if (leftBean == null) {
+                "--"
+            } else {
+                leftBean?.name
+            }
+            tv_integral_right_title?.text = if (rightBean == null) {
+                "--"
+            } else {
+                rightBean?.name
+            }
+            //tag
+            tv_integral_left_title?.setTag(
+                R.id.dy_tv_tag, if (leftBean == null) {
+                    ""
+                } else {
+                    leftBean.machineTypeId
+                }
+            )
+            tv_integral_right_title?.setTag(
+                R.id.dy_tv_tag, if (rightBean == null) {
+                    ""
+                } else {
+                    rightBean.machineTypeId
+                }
+            )
+
+            //积分
+            tv_integral_left?.text = if (leftBean == null) {
+                "--"
+            } else {
+                leftBean?.point
+            }
+            tv_integral_right?.text = if (rightBean == null) {
+                "--"
+            } else {
+                rightBean?.point
             }
         }
     }

@@ -2,6 +2,7 @@ package cn.dianyinhuoban.szg.mvp.order.view
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -41,7 +42,15 @@ class ProductListParentFragment : BaseFragment<MachineTypePresenter?>(), Machine
         contentView?.findViewById<TextView>(R.id.tv_order)?.setOnClickListener {
             OrderListActivity.open(requireContext())
         }
+        Log.d("ProductList", "initView: ${mPresenter==null}")
         mPresenter?.fetchMachineType()
+    }
+
+    override fun onStart() {
+        super.onStart()
+       if(viewPager?.adapter==null){
+           mPresenter?.fetchMachineType()
+       }
     }
 
 

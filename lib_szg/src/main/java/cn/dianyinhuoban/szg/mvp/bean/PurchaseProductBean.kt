@@ -13,5 +13,9 @@ data class PurchaseProductBean(
     var name: String?,
     var price: String?,
     var set_meal: String?,
-    var typeName: String?
+    var typeName: String?,
+    var typeId: String?,
+    var act_cashback:String?,
+    var standard_cashback:String?,
+    var back_point:String?
 ) : Parcelable

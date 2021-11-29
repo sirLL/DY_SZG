@@ -24,11 +24,17 @@ import java.math.BigDecimal
 
 class ProductDetailActivity : BaseActivity<IPresenter?>() {
     var mProduct: PurchaseProductBean? = null
+    var mMachineType: String = ""
 
     companion object {
-        fun openProductDetailActivity(context: Context, product: PurchaseProductBean) {
+        fun openProductDetailActivity(
+            context: Context,
+            machineType: String,
+            product: PurchaseProductBean
+        ) {
             val intent = Intent(context, ProductDetailActivity::class.java)
             val bundle = Bundle()
+            bundle.putString("machineType", machineType)
             bundle.putParcelable("product", product)
             intent.putExtras(bundle)
             context.startActivity(intent)
@@ -38,6 +44,7 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
     override fun handleIntent(bundle: Bundle?) {
         super.handleIntent(bundle)
         mProduct = bundle?.getParcelable("product")
+        mMachineType = bundle?.getString("machineType", "") ?: "";
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +84,8 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
                     mProduct?.name ?: "",
                     mProduct?.img ?: "",
                     mProduct?.price ?: "",
-                    tv_count.text.toString()
+                    tv_count.text.toString(),
+                    mMachineType
                 )
             }
         }

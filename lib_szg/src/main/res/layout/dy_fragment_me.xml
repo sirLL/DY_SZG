@@ -10,8 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="12dp"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp">
 
         <ImageView
             android:id="@+id/iv_avatar"
@@ -226,6 +226,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:alpha="0.8"
+                    android:gravity="center"
                     android:text="激活返现/元"
                     android:textColor="@color/color_white"
                     android:textSize="10sp"
@@ -239,28 +240,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:alpha="0.8"
-                    android:text="采购奖励/元"
-                    android:textColor="@color/color_white"
-                    android:textSize="10sp"
-                    app:layout_constraintEnd_toStartOf="@id/textView8"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintStart_toEndOf="@id/textView4"
-                    app:layout_constraintTop_toBottomOf="@id/divider1" />
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_marginEnd="12dp"
                     android:alpha="0.8"
-                    android:text="积分"
+                    android:gravity="end"
+                    android:text="采购奖励/元"
                     android:textColor="@color/color_white"
                     android:textSize="10sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintStart_toEndOf="@id/textView5"
+                    app:layout_constraintStart_toEndOf="@id/textView4"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <TextView
@@ -268,27 +256,26 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
                     android:maxLines="1"
                     android:text="--"
                     android:textColor="@color/color_white"
                     android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/tv_integral_left_title"
                     app:layout_constraintEnd_toEndOf="@id/textView3"
                     app:layout_constraintStart_toStartOf="@id/textView3"
-                    app:layout_constraintTop_toBottomOf="@id/textView3" />
+                    app:layout_constraintTop_toBottomOf="@id/textView3"
+                    app:layout_goneMarginBottom="16dp" />
 
                 <TextView
                     android:id="@+id/tv_amount_activation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
                     android:maxLines="1"
                     android:text="--"
                     android:textColor="@color/color_white"
                     android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/textView4"
                     app:layout_constraintStart_toStartOf="@id/textView4"
                     app:layout_constraintTop_toBottomOf="@id/textView4" />
@@ -298,18 +285,56 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
+                    android:gravity="end"
                     android:maxLines="1"
                     android:text="--"
                     android:textColor="@color/color_white"
                     android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/textView5"
                     app:layout_constraintStart_toStartOf="@id/textView5"
                     app:layout_constraintTop_toBottomOf="@id/textView5" />
 
                 <TextView
-                    android:id="@+id/tv_integral"
+                    android:id="@+id/tv_integral_left_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="10dp"
+                    android:alpha="0.8"
+                    android:drawableEnd="@drawable/dy_ic_arrow_right_ffffff"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/color_white"
+                    android:textSize="10sp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@id/tv_integral_left"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_amount_team"
+                    tools:text="积分"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_integral_right_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="12dp"
+                    android:alpha="0.8"
+                    android:drawableEnd="@drawable/dy_ic_arrow_right_ffffff"
+                    android:drawablePadding="6dp"
+                    android:gravity="end|center_vertical"
+                    android:paddingStart="16dp"
+                    android:textColor="@color/color_white"
+                    android:textSize="10sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_amount_team"
+                    tools:text="积分"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_integral_left"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -318,10 +343,33 @@
                     android:text="--"
                     android:textColor="@color/color_white"
                     android:textSize="14sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/textView8"
-                    app:layout_constraintStart_toStartOf="@id/textView8"
-                    app:layout_constraintTop_toBottomOf="@id/textView8" />
+                    app:layout_constraintEnd_toStartOf="@id/tv_integral_right"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="@id/tv_integral_left_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_integral_left_title"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_integral_right"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="end"
+                    android:maxLines="1"
+                    android:text="--"
+                    android:textColor="@color/color_white"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/tv_integral_right_title"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/tv_integral_left"
+                    app:layout_constraintTop_toBottomOf="@id/tv_integral_right_title"
+                    tools:visibility="visible" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

@@ -102,7 +102,8 @@ class SubmitOrderActivity : BaseActivity<ProductListPresenter?>(), ProductListCo
                     mCheckedProduct?.name ?: "",
                     mCheckedProduct?.img ?: "",
                     mCheckedProduct?.price ?: "",
-                    tv_count.text.toString()
+                    tv_count.text.toString(),
+                    mCheckedProduct?.typeId ?: ""
                 )
             }
         }

@@ -15,7 +15,8 @@ interface TransferContract {
             machineIds: String,
             transferType: String,
             startMachineSN: String,
-            endMachineSN: String
+            endMachineSN: String,
+            transPoint:Boolean
         ): Observable<Response<EmptyBean?>>
     }
 
@@ -28,7 +29,8 @@ interface TransferContract {
             machineIds: String,
             transferType: String,
             startMachineSN: String,
-            endMachineSN: String
+            endMachineSN: String,
+            transPoint:Boolean
         )
     }
 

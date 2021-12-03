@@ -92,6 +92,9 @@ class TransferActivity : BaseActivity<TransferPresenter?>(), TransferContract.Vi
             }
 
         })
+        iv_switch.setOnClickListener{
+            it.isSelected=!it.isSelected
+        }
 
         //从团队成员详情跳转过来
         mMember?.let {
@@ -452,7 +455,8 @@ class TransferActivity : BaseActivity<TransferPresenter?>(), TransferContract.Vi
             checkedIDs,
             transferType,
             "",
-            ""
+            "",
+            iv_switch.isSelected
         )
     }
 

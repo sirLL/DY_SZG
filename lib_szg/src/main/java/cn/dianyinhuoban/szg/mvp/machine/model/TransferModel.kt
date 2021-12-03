@@ -16,7 +16,8 @@ class TransferModel : BaseModel(), TransferContract.Model {
         machineIds: String,
         transferType: String,
         startMachineSN: String,
-        endMachineSN: String
+        endMachineSN: String,
+        transPoint: Boolean
     ): Observable<Response<EmptyBean?>> {
         return mRetrofit.create(ApiService::class.java)
             .submitMachineTransfer(
@@ -27,7 +28,12 @@ class TransferModel : BaseModel(), TransferContract.Model {
                 machineIds,
                 transferType,
                 startMachineSN,
-                endMachineSN
+                endMachineSN,
+                if (transPoint) {
+                    "1"
+                } else {
+                    "0"
+                }
             )
     }
 }

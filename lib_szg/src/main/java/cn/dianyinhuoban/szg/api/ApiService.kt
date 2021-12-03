@@ -243,6 +243,7 @@ interface ApiService {
         @Field("type") transferType: String,
         @Field("start") startMachineID: String,
         @Field("end") endMachineID: String,
+        @Field("transPoint") transPoint: String
     ): Observable<Response<EmptyBean?>>
 
     /**

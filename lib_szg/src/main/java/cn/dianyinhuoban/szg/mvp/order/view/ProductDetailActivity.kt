@@ -14,6 +14,7 @@ import coil.load
 import com.wareroom.lib_base.mvp.IPresenter
 import com.wareroom.lib_base.ui.BaseActivity
 import com.wareroom.lib_base.utils.NumberUtils
+import com.wareroom.lib_base.utils.filter.NumberFilter
 import kotlinx.android.synthetic.main.dy_activity_product_detail.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -52,6 +53,7 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
         EventBus.getDefault().register(this)
         setTitle("商品详情")
         setContentView(R.layout.dy_activity_product_detail)
+        tv_count.filters = arrayOf(NumberFilter().setDigits(0))
         setInputListener()
         setClickListener()
         bindDetail()
@@ -65,18 +67,23 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
         btn_less.setOnClickListener {
             val num = NumberUtils.string2BigDecimal(tv_count.text.toString())
             if (num.toInt() > 1) {
-                tv_count.text = num.subtract(BigDecimal.ONE).toPlainString()
+                tv_count.setText(num.subtract(BigDecimal.ONE).toPlainString())
             }
         }
 
         btn_add.setOnClickListener {
             val num = NumberUtils.string2BigDecimal(tv_count.text.toString())
-            tv_count.text = num.add(BigDecimal.ONE).toPlainString()
+            tv_count.setText(num.add(BigDecimal.ONE).toPlainString())
         }
 
         btn_submit.setOnClickListener {
+            val count = tv_count.text.toString()
             if (mProduct == null) {
                 showToast("请选择商品")
+            } else if (count.isNullOrBlank()) {
+                showToast("请输入商品数量")
+            } else if (count.toInt() <= 0) {
+                showToast("商品数量必须大于0")
             } else {
                 ConfirmOrderActivity.openConfirmOrderActivity(
                     this,
@@ -125,7 +132,7 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
         } else {
             "¥${NumberUtils.numberScale(mProduct?.price)}"
         }
-        tv_count.text = "1"
+        tv_count.setText("1")
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

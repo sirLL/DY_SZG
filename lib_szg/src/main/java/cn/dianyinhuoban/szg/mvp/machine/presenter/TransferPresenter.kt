@@ -23,7 +23,8 @@ class TransferPresenter(view: TransferContract.View) :
         machineIds: String,
         transferType: String,
         startMachineSN: String,
-        endMachineSN: String
+        endMachineSN: String,
+        transPoint: Boolean
     ) {
         if (!isDestroy) {
             view?.showLoading(false)
@@ -38,7 +39,8 @@ class TransferPresenter(view: TransferContract.View) :
                     machineIds,
                     transferType,
                     startMachineSN,
-                    endMachineSN
+                    endMachineSN,
+                    transPoint
                 )
                     .compose(SchedulerProvider.getInstance().applySchedulers())
                     .compose(ResponseTransformer.handleResult())

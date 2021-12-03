@@ -12,6 +12,7 @@ import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
 import cn.dianyinhuoban.szg.mvp.income.view.IncomeActivity
 import cn.dianyinhuoban.szg.mvp.income.view.IntegralRecordActivity
 import cn.dianyinhuoban.szg.mvp.income.view.WithdrawActivity
+import cn.dianyinhuoban.szg.mvp.machine.view.ExchangeActivity
 import cn.dianyinhuoban.szg.mvp.machine.view.MachineManagerActivity
 import cn.dianyinhuoban.szg.mvp.me.contract.MeContract
 import cn.dianyinhuoban.szg.mvp.me.presenter.MePresenter
@@ -121,7 +122,7 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
                         startActivity(Intent(context, JiangWuTangActivity::class.java))
                     }
                     4 -> {//采购订单
-                        startActivity(Intent(context, OrderListActivity::class.java))
+                        startActivity(Intent(context, ExchangeActivity::class.java))
                     }
                     5 -> {//银行卡
                         startActivity(Intent(context, BankManageActivity::class.java))
@@ -150,11 +151,11 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
 //        menuData.add(MeMenuBean(1, "机具划拨", R.drawable.dy_ic_me_menu_transfer))
 //        menuData.add(MeMenuBean(2, "机具采购", R.drawable.dy_ic_me_menu_purchase))
 //        menuData.add(MeMenuBean(3, "讲武堂", R.drawable.dy_ic_me_menu_school))
-        menuData.add(MeMenuBean(4, "采购订单", R.drawable.dy_ic_me_menu_purchase_order))
+        menuData.add(MeMenuBean(4, "积分兑换", R.drawable.dy_ic_me_menu_exchange))
 //        menuData.add(MeMenuBean(5, "银行卡", R.drawable.dy_ic_me_menu_bank_card))
-        menuData.add(MeMenuBean(6, "PK", R.drawable.dy_ic_me_menu_pk))
         menuData.add(MeMenuBean(7, "授权书", R.drawable.dy_ic_me_menu_auth))
         menuData.add(MeMenuBean(8, "在线客服", R.drawable.ic_me_menu_online_service))
+        menuData.add(MeMenuBean(6, "PK", R.drawable.dy_ic_me_menu_pk))
         menuData.add(MeMenuBean(9, "设置", R.drawable.dy_ic_me_menu_setting))
         mAdapter?.data = menuData
     }
@@ -163,7 +164,7 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
         super.onStart()
         fetchAuthResult()
         fetchPersonalData()
-        fetchIntegralBalance()
+//        fetchIntegralBalance()
     }
 
     private fun fetchPersonalData() {

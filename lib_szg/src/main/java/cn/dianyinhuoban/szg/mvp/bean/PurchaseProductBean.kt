@@ -14,7 +14,7 @@ data class PurchaseProductBean(
     var price: String?,
     var set_meal: String?,
     var typeName: String?,
-    var typeId: String?,
+    var type_id: String?,
     var act_cashback:String?,
     var standard_cashback:String?,
     var back_point:String?

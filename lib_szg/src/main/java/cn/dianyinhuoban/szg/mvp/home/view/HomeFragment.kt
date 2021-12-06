@@ -9,10 +9,12 @@ import androidx.core.content.ContextCompat
 import cn.dianyinhuoban.szg.CountdownTextUtils
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.bean.CustomModel
+import cn.dianyinhuoban.szg.bean.GiftInfoBean
 import cn.dianyinhuoban.szg.mvp.WebHtmlActivity
 import cn.dianyinhuoban.szg.mvp.bean.BannerBean
 import cn.dianyinhuoban.szg.mvp.bean.HomeDataBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
+import cn.dianyinhuoban.szg.mvp.gift.view.GiftActivity
 import cn.dianyinhuoban.szg.mvp.home.contract.HomeContract
 import cn.dianyinhuoban.szg.mvp.home.presenter.HomePresenter
 import cn.dianyinhuoban.szg.mvp.home.view.adapter.ImageBannerAdapter
@@ -140,6 +142,7 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
         }
 
         mPresenter?.fetchDialogBanner()
+        mPresenter?.fetchGiftInfo()
     }
 
     private fun setupRefreshLayout() {
@@ -348,12 +351,12 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
         }
         tv_left_no_team.text = "当前排名:${mHomeDataBean?.teamRank?.rank ?: "--"}名"
         tv_left_activation_amount_team.text =
-            "激活量/台:${mHomeDataBean?.teamRank?.activeTrans?:"--"}"
+            "激活量/台:${mHomeDataBean?.teamRank?.activeTrans ?: "--"}"
 
         tv_right_name_team.text = mHomeDataBean?.teamPK?.name
         tv_right_no_team.text = "当前排名:${mHomeDataBean?.teamPK?.rank ?: "--"}名"
         tv_right_activation_amount_team.text =
-            "激活量/台:${mHomeDataBean?.teamPK?.activeTrans?:"--"}"
+            "激活量/台:${mHomeDataBean?.teamPK?.activeTrans ?: "--"}"
     }
 
     var mNoticeData: List<CustomModel>? = null
@@ -409,6 +412,14 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
 //                null
 //            )
 //        }
+    }
+
+    override fun bindGiftInfo(data: GiftInfoBean) {
+        data?.let {
+            if (!it.money.isNullOrBlank()) {
+                startActivity(Intent(requireContext(),GiftActivity::class.java))
+            }
+        }
     }
 
     override fun onDestroyView() {

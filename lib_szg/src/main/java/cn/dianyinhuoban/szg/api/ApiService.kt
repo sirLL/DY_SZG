@@ -1,6 +1,7 @@
 package cn.dianyinhuoban.szg.api
 
 import cn.dianyinhuoban.szg.bean.CustomModel
+import cn.dianyinhuoban.szg.bean.GiftInfoBean
 import cn.dianyinhuoban.szg.bean.IntegralRecordBean
 import cn.dianyinhuoban.szg.bean.MemberLevelBean
 import cn.dianyinhuoban.szg.mvp.bean.*
@@ -499,4 +500,16 @@ interface ApiService {
         @Field("status") status: String,
         @Field("page") page: Int
     ): Observable<Response<List<IntegralRecordBean>?>>
+
+    /**
+     * 生日红包
+     */
+    @GET(URLConfig.URL_GIFT_INFO)
+    fun fetchGiftInfo(): Observable<Response<GiftInfoBean?>>
+
+    /**
+     * 领取红包
+     */
+    @GET(URLConfig.URL_GIFT_GET)
+    fun submitGetGift(): Observable<Response<EmptyBean?>>
 }

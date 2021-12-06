@@ -1,4 +1,4 @@
-package cn.dianyinhuoban.szg.mvp.poster.view
+package cn.dianyinhuoban.szg.mvp.gift.view
 
 import android.Manifest
 import android.content.Context
@@ -9,155 +9,116 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
-import android.text.TextUtils
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.api.URLConfig
-import cn.dianyinhuoban.szg.mvp.bean.PosterItemBean
-import cn.dianyinhuoban.szg.util.StringUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
+import cn.dianyinhuoban.szg.bean.GiftInfoBean
+import cn.dianyinhuoban.szg.mvp.gift.contract.GiftContract
+import cn.dianyinhuoban.szg.mvp.gift.presenter.GiftPresenter
+import cn.dianyinhuoban.szg.widget.dialog.GiftDialog
 import com.gyf.immersionbar.ImmersionBar
 import com.tbruyelle.rxpermissions2.RxPermissions
-import com.wareroom.lib_base.mvp.IPresenter
 import com.wareroom.lib_base.ui.BaseActivity
 import com.wareroom.lib_base.utils.BitmapUtils
-import com.wareroom.lib_base.utils.DateTimeUtils
 import com.wareroom.lib_base.utils.cache.MMKVUtil
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.dy_activity_poster_edit.*
 import java.io.File
 import java.util.*
 
-class PosterEditActivity : BaseActivity<IPresenter?>() {
-    private var mPoster: PosterItemBean? = null
+class GiftActivity : BaseActivity<GiftContract.Presenter?>(), GiftContract.View {
 
     companion object {
-        const val ACTION_SAVE_IMG = 10
-        const val ACTION_SHARE_IMG = 11
-
-        fun openPosterEditActivity(context: Context, posterBean: PosterItemBean) {
-            val intent = Intent(context, PosterEditActivity::class.java)
-            val bundle = Bundle()
-            bundle.putParcelable("poster", posterBean)
-            intent.putExtras(bundle)
-            context.startActivity(intent)
-        }
+        private const val ACTION_SAVE_IMG = 10
+        private const val ACTION_SHARE_IMG = 11
     }
 
-
-
-    override fun getStatusBarColor(): Int {
-        return R.color.white
-    }
-
-    override fun getToolbarColor(): Int {
-        return Color.TRANSPARENT
+    private var tvName: TextView? = null
+    private var tvContent: TextView? = null
+    private var tvSignature: TextView? = null
+    private var ivQR: ImageView? = null
+    private var contentContainer: ConstraintLayout? = null
+    private var giftDialog: GiftDialog? = null
+    override fun getRootView(): Int {
+        return R.layout.dy_activity_gift_root
     }
 
     override fun getBackButtonIcon(): Int {
         return R.drawable.dy_ic_back_circle
     }
 
-    override fun getRootView(): Int {
-        return R.layout.dy_activity_poster_edit_root
+    override fun getToolbarColor(): Int {
+        return Color.TRANSPARENT
     }
+
 
     override fun initStatusBar() {
-
-    }
-
-    private fun setupStatusBar() {
         ImmersionBar.with(this)
+            .transparentStatusBar()
             .autoDarkModeEnable(isDarkModeEnable)
             .autoStatusBarDarkModeEnable(isDarkModeEnable)
-            .statusBarColor(statusBarColor)
-            .fitsSystemWindows(true)
-            .flymeOSStatusBarFontColor(statusBarColor)
-            .titleBarMarginTop(mToolbar)
+            .statusBarView(findViewById(R.id.status_bar))
+            .statusBarDarkFont(true)
+            .flymeOSStatusBarFontColor(R.color.black)
             .init()
-    }
-
-    override fun handleIntent(bundle: Bundle?) {
-        super.handleIntent(bundle)
-        mPoster = bundle?.getParcelable("poster")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dy_activity_poster_edit)
-        setupStatusBar()
-
-        cb_show_qr.setOnCheckedChangeListener { _, isChecked ->
-            cl_info_container.visibility = if (isChecked) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-        }
-
-        cb_show_date.setOnCheckedChangeListener { _, isChecked ->
-            cl_date_container.visibility = if (isChecked) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-        }
-
-        tv_save.setOnClickListener {
-            saveView(cl_share_container, ACTION_SAVE_IMG)
-        }
-        tv_share.setOnClickListener {
-            saveView(cl_share_container, ACTION_SHARE_IMG)
-        }
-        tv_copy.setOnClickListener {
-            val content = ed_content.text.toString()
-            if (content.isNotEmpty()) {
-                StringUtil.copyString(PosterEditActivity@ this, content)
-                showToast("复制成功")
-            }
-        }
-        mPoster?.description?.let {
-            if (it.isNotEmpty()) {
-                ed_content.setText(it)
-                ed_content.setSelection(it.length)
-            }
-        }
-        Glide.with(this)
-            .asBitmap()
-            .load(mPoster?.thumb ?: "")
-            .into(object : SimpleTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    iv_cover.setImageBitmap(resource)
-                }
-            })
-
+        setContentView(R.layout.dy_activity_gift)
+        tvName = findViewById(R.id.tv_name)
+        tvContent = findViewById(R.id.tv_content)
+        tvSignature = findViewById(R.id.tv_signature)
+        contentContainer = findViewById(R.id.content_container)
+        ivQR = findViewById(R.id.iv_qr)
+        mPresenter?.fetchGiftInfo()
 
         val qrContent = URLConfig.PAGE_WEB_REGISTER + MMKVUtil.getInviteCode()
         createQR(qrContent)
 
-        val name = if (!TextUtils.isEmpty(MMKVUtil.getNick())) {
-            MMKVUtil.getNick()
-        } else {
-            MMKVUtil.getUserName()
-        }
-        tv_name.text = "姓名:${name}"
-        tv_invite_code.text = "推荐码:${MMKVUtil.getInviteCode()}"
+        findViewById<ImageView>(R.id.tv_save).setOnClickListener {
+            contentContainer?.let { container ->
+                saveView(container, ACTION_SAVE_IMG)
+            }
 
-        tv_date.text = DateTimeUtils.formatDate(
-            Calendar.getInstance().timeInMillis,
-            DateTimeUtils.PATTERN_YYYY_MM_DD_CHAR
-        )
+        }
+        findViewById<ImageView>(R.id.tv_share).setOnClickListener {
+            contentContainer?.let { container ->
+                saveView(container, ACTION_SHARE_IMG)
+            }
+        }
     }
 
-    override fun getPresenter(): IPresenter? {
-        return null
+    override fun getPresenter(): GiftContract.Presenter? {
+        return GiftPresenter(this)
+    }
+
+    override fun bindGiftInfo(data: GiftInfoBean) {
+        tvName?.text = data.name
+        tvContent?.text = data.content
+        tvSignature?.text = data.signature
+        showGiftDialog(data.money ?: "")
+    }
+
+    override fun onGetGiftSuccess() {
+        giftDialog?.showAmount()
+    }
+
+    private fun showGiftDialog(amount: String) {
+        if (giftDialog == null) {
+            giftDialog = GiftDialog(this).setOnViewClickListener {
+                mPresenter?.submitGetGift()
+            }
+        }
+        giftDialog?.setAmount(amount)
+        giftDialog?.show()
     }
 
     private fun createQR(qrContent: String) {
@@ -179,7 +140,7 @@ class PosterEditActivity : BaseActivity<IPresenter?>() {
             .subscribe(object : Observer<Bitmap> {
                 override fun onSubscribe(d: Disposable) {}
                 override fun onNext(bitmap: Bitmap) {
-                    iv_qr.setImageBitmap(bitmap)
+                    ivQR?.setImageBitmap(bitmap)
                 }
 
                 override fun onError(e: Throwable) {
@@ -222,7 +183,7 @@ class PosterEditActivity : BaseActivity<IPresenter?>() {
                     if (action == ACTION_SAVE_IMG) {
                         showToast("图片保存至${path}")
                     } else {
-                        shareFile(this@PosterEditActivity, path)
+                        shareFile(this@GiftActivity, path)
                     }
                 }
 

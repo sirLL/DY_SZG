@@ -1,6 +1,7 @@
 package cn.dianyinhuoban.szg.mvp.home.contract
 
 import cn.dianyinhuoban.szg.bean.CustomModel
+import cn.dianyinhuoban.szg.bean.GiftInfoBean
 import cn.dianyinhuoban.szg.mvp.bean.BannerBean
 import cn.dianyinhuoban.szg.mvp.bean.HomeDataBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
@@ -19,6 +20,8 @@ interface HomeContract {
         fun fetchBanner(): Observable<Response<List<BannerBean>?>>
 
         fun fetchPersonalData(): Observable<Response<PersonalBean?>>
+
+        fun fetchGiftInfo(): Observable<Response<GiftInfoBean?>>
     }
 
     interface Presenter {
@@ -31,6 +34,8 @@ interface HomeContract {
         fun fetchBanner()
 
         fun fetchPersonalData()
+
+        fun fetchGiftInfo()
     }
 
     interface View : IView {
@@ -43,5 +48,7 @@ interface HomeContract {
         fun bindBanner(data: List<BannerBean>?)
 
         fun bindPersonalData(personalBean: PersonalBean?)
+
+        fun bindGiftInfo(data: GiftInfoBean)
     }
 }

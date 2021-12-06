@@ -2,6 +2,7 @@ package cn.dianyinhuoban.szg.mvp.home.presenter
 
 import com.wareroom.lib_http.CustomResourceSubscriber
 import cn.dianyinhuoban.szg.bean.CustomModel
+import cn.dianyinhuoban.szg.bean.GiftInfoBean
 import cn.dianyinhuoban.szg.mvp.bean.BannerBean
 import cn.dianyinhuoban.szg.mvp.bean.HomeDataBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
@@ -127,6 +128,30 @@ class HomePresenter(view: HomeContract.View) : BasePresenter<HomeModel, HomeCont
                         MMKVUtil.saveTeam(t.teamName)
                         if (!isDestroy) {
                             view?.bindPersonalData(t)
+                        }
+                    }
+                })
+        }
+    }
+
+    override fun fetchGiftInfo() {
+        if (!isDestroy) {
+            view?.showLoading(false)
+        }
+        mModel?.let {
+            it.fetchGiftInfo()
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .compose(ResponseTransformer.handleResult())
+                .subscribeWith(object : CustomResourceSubscriber<GiftInfoBean?>() {
+                    override fun onError(exception: ApiException?) {
+                        handleError(exception)
+                    }
+
+                    override fun onNext(t: GiftInfoBean) {
+                        super.onNext(t)
+                        if (!isDestroy) {
+                            view?.hideLoading()
+                            view?.bindGiftInfo(t)
                         }
                     }
                 })

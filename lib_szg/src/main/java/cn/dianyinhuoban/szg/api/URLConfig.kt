@@ -10,7 +10,7 @@ interface URLConfig {
         const val PAGE_USER_AGREEMENT = "news_userAgreement.html"
 
         //网页注册
-        const val PAGE_WEB_REGISTER = "http://m.dyhm.shop/signup/"
+        const val PAGE_WEB_REGISTER = "http://szgm.dyhm.shop/signup/"
 
         //发送短信
         const val URL_SEND_SMS = "sms_aliSms.html"
@@ -202,6 +202,12 @@ interface URLConfig {
 
         //积分记录
         const val URL_INTEGRAL_RECORD = "machinenew_pointLog.html"
+
+        //生日红包
+        const val URL_GIFT_INFO="user_userBirthday.html"
+
+        //领取红包
+        const val URL_GIFT_GET="user_birthdayOpen.html"
 
 
     }

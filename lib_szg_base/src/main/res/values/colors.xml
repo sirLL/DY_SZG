@@ -6,4 +6,5 @@
     <color name="dy_color_divider">#FAFAFA</color>
     <color name="dy_base_color_white">#FFFFFF</color>
     <color name="dy_base_color_transparent">#00000000</color>
+    <color name="black">#000000</color>
 </resources>

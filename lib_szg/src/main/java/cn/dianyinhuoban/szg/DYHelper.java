@@ -16,6 +16,8 @@ import com.wareroom.lib_http.response.ResponseTransformer;
 import com.wareroom.lib_http.schedulers.SchedulerProvider;
 import com.wareroom.lib_http.CustomResourceSubscriber;
 
+import java.util.LinkedHashMap;
+
 import cn.dianyinhuoban.szg.api.ApiService;
 import cn.dianyinhuoban.szg.mvp.auth.view.RealnameAuthActivity;
 import cn.dianyinhuoban.szg.mvp.bean.AuthResult;
@@ -27,16 +29,26 @@ import cn.dianyinhuoban.szg.widget.dialog.MessageDialog;
 
 public class DYHelper {
     public static final String ACTION_LOGIN_SUCCESS = "action.DYHM.LOGIN_SUCCESS";
+    private static DYHelper instance = null;
+    private OnCheckVersionCallback mOnCheckVersionCallback;
 
-    public static void init(Application application) {
+    public DYHelper init(Application application) {
         MMKV.initialize(application.getApplicationContext());
         ToastUtils.init(application);
         RetrofitServiceManager.initialize(application.getApplicationContext());
         QYHelper.initQY(application.getApplicationContext());
+        return instance;
+    }
+
+    public static synchronized DYHelper getInstance() {
+        if (instance == null) {
+            instance = new DYHelper();
+        }
+        return instance;
     }
 
     //登录电银泓盟
-    public static void loginDYHM(Context context, String userName, String password) {
+    public void loginDYHM(Context context, String userName, String password) {
         ApiService apiService = RetrofitServiceManager.getInstance().getRetrofit().create(ApiService.class);
         apiService.submitLogin(userName, password).compose(SchedulerProvider.getInstance().applySchedulers())
                 .compose(ResponseTransformer.handleResult())
@@ -67,7 +79,7 @@ public class DYHelper {
     }
 
     //登录电银泓盟
-    public static void loginDYHM(Context context, String userName, String password, OnLoginCallBack callBack) {
+    public void loginDYHM(Context context, String userName, String password, OnLoginCallBack callBack) {
         ApiService apiService = RetrofitServiceManager.getInstance().getRetrofit().create(ApiService.class);
         apiService.submitLogin(userName, password).compose(SchedulerProvider.getInstance().applySchedulers())
                 .compose(ResponseTransformer.handleResult())
@@ -101,7 +113,7 @@ public class DYHelper {
                 });
     }
 
-    private static void fetchAuthResult(Context context, String token, OnLoginCallBack callBack) {
+    private void fetchAuthResult(Context context, String token, OnLoginCallBack callBack) {
         ApiService apiService = RetrofitServiceManager.getInstance().getRetrofit().create(ApiService.class);
         apiService.fetchAuthResult(token).compose(SchedulerProvider.getInstance().applySchedulers())
                 .compose(ResponseTransformer.handleResult())
@@ -132,7 +144,7 @@ public class DYHelper {
                 });
     }
 
-    private static void showRealNameDialog(Context context, OnLoginCallBack callBack) {
+    private void showRealNameDialog(Context context, OnLoginCallBack callBack) {
         String message = "您尚未完成实名认证，去认证?";
         MessageDialog messageDialog = new MessageDialog(context)
                 .setMessage(message)
@@ -156,7 +168,7 @@ public class DYHelper {
     }
 
     //打卡电银泓盟
-    public static void openDYHM(Context context) {
+    public void openDYHM(Context context) {
         String uid = MMKVUtil.getUserID();
         String userName = MMKVUtil.getUserName();
         String token = MMKVUtil.getToken();
@@ -182,7 +194,7 @@ public class DYHelper {
     }
 
     //判断是否登录过电银泓盟，若返回true,调用openDYHM()方法，打开电银泓盟
-    public static boolean hasLoggedDYHM() {
+    public boolean hasLoggedDYHM() {
         String uid = MMKVUtil.getUserID();
         String userName = MMKVUtil.getUserName();
         String token = MMKVUtil.getToken();
@@ -200,4 +212,28 @@ public class DYHelper {
         void onLoginError(int code, String message);
     }
 
+    public DYHelper setOnCheckVersionCallback(OnCheckVersionCallback onCheckVersionCallback) {
+        mOnCheckVersionCallback = onCheckVersionCallback;
+        return this;
+    }
+
+    public OnCheckVersionCallback getOnCheckVersionCallback() {
+        return mOnCheckVersionCallback;
+    }
+
+    public interface OnCheckVersionCallback {
+        LinkedHashMap<String, String> getFetchVersionHeader();
+
+        LinkedHashMap<String, String> getFetchVersionParams();
+
+        RequestMethod getRequestMethod();
+
+        String getRequestUrl();
+
+        String onCheckVersion(String versionInfo);
+    }
+
+    public enum RequestMethod {
+        POST, GET, POSTJSON
+    }
 }

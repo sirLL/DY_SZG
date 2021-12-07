@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun login(userName: String, password: String) {
-        DYHelper.loginDYHM(this, userName, password, object : DYHelper.OnLoginCallBack {
+        DYHelper.getInstance().loginDYHM(this, userName, password, object : DYHelper.OnLoginCallBack {
             override fun onLoginSuccess() {
 
             }

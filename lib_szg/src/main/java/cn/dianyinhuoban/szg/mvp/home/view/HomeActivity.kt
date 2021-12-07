@@ -1,9 +1,13 @@
 package cn.dianyinhuoban.szg.mvp.home.view
 
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import cn.dianyinhuoban.szg.DYHelper
@@ -13,8 +17,6 @@ import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.bean.SystemItemBean
 import cn.dianyinhuoban.szg.mvp.home.contract.SystemContract
 import cn.dianyinhuoban.szg.mvp.home.presenter.SystemPresenter
-import cn.dianyinhuoban.szg.mvp.machine.view.MachineManagerFragment
-import cn.dianyinhuoban.szg.mvp.machine.view.MachineManagerFragmentNew
 import cn.dianyinhuoban.szg.mvp.me.view.MeFragment
 import cn.dianyinhuoban.szg.mvp.order.view.ProductListParentFragment
 import cn.dianyinhuoban.szg.mvp.poster.view.PosterActivity
@@ -27,6 +29,15 @@ import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
 import com.wareroom.lib_base.ui.BaseActivity
 import com.wareroom.lib_base.utils.AppManager
+import com.wareroom.versionchecklib.core.http.HttpHeaders
+import com.wareroom.versionchecklib.core.http.HttpParams
+import com.wareroom.versionchecklib.core.http.HttpRequestMethod
+import com.wareroom.versionchecklib.v2.AllenVersionChecker
+import com.wareroom.versionchecklib.v2.builder.DownloadBuilder
+import com.wareroom.versionchecklib.v2.builder.UIData
+import com.wareroom.versionchecklib.v2.callback.CustomDownloadingDialogListener
+import com.wareroom.versionchecklib.v2.callback.CustomVersionDialogListener
+import com.wareroom.versionchecklib.v2.callback.RequestVersionListener
 import kotlinx.android.synthetic.main.dy_activity_home.*
 import java.util.*
 
@@ -52,6 +63,7 @@ class HomeActivity : BaseActivity<SystemPresenter?>(), SystemContract.View {
         super.onStart()
         mPresenter?.fetchSystemSetting()
         mPresenter?.fetchAuthResult()
+        fetchVersion()
     }
 
     private fun initView() {
@@ -200,4 +212,104 @@ class HomeActivity : BaseActivity<SystemPresenter?>(), SystemContract.View {
         })
     }
 
+    private fun fetchVersion() {
+        if (DYHelper.getInstance().onCheckVersionCallback == null
+            || DYHelper.getInstance().onCheckVersionCallback.requestUrl.isNullOrBlank()) return
+        val checker = AllenVersionChecker.getInstance().requestVersion()
+        val headerMap = DYHelper.getInstance().onCheckVersionCallback?.fetchVersionHeader
+        val paramsMap = DYHelper.getInstance().onCheckVersionCallback?.fetchVersionParams
+        if (!headerMap.isNullOrEmpty()) {
+            val headers = HttpHeaders()
+            for (entry in headerMap.entries) {
+                headers[entry.key] = entry.value
+            }
+            checker.httpHeaders = headers
+        }
+        if (!paramsMap.isNullOrEmpty()) {
+            val params = HttpParams()
+            for (entry in paramsMap.entries) {
+                params[entry.key] = entry.value
+            }
+            checker.requestParams = params
+        }
+        val requestMethod = DYHelper.getInstance().onCheckVersionCallback.requestMethod
+        checker.requestMethod = when (requestMethod) {
+            DYHelper.RequestMethod.POSTJSON -> {
+                HttpRequestMethod.POSTJSON
+            }
+            DYHelper.RequestMethod.POST -> {
+                HttpRequestMethod.POST
+            }
+            else -> {
+                HttpRequestMethod.GET
+            }
+        }
+        checker.requestUrl = DYHelper.getInstance().onCheckVersionCallback.requestUrl
+        checker.request(object : RequestVersionListener {
+            override fun onRequestVersionSuccess(
+                downloadBuilder: DownloadBuilder?,
+                result: String?
+            ): UIData? {
+                var uiDate: UIData? = null
+                val downloadUrl =
+                    DYHelper.getInstance().onCheckVersionCallback.onCheckVersion(result)
+                if (!downloadUrl.isNullOrBlank()) {
+                    uiDate = UIData.create().setDownloadUrl(downloadUrl)
+                        .setTitle("版本更新")
+                        .setContent("发现新版本，为了您更好的体验，需要更新APP")
+                }
+                downloadBuilder?.setForceUpdateListener {
+                    AppManager.getInstance().exitApp()
+                }
+                downloadBuilder?.isRunOnForegroundService = true
+                return uiDate
+            }
+
+            override fun onRequestVersionFailure(message: String?) {
+
+            }
+
+        }).setForceUpdateListener {
+            AppManager.getInstance().exitApp()
+        }.setCustomVersionDialogListener(createVersionDialog())
+            .setCustomDownloadingDialogListener(createDownloadingDialog())
+            .executeMission(HomeActivity@ this);
+    }
+
+    private fun createVersionDialog(): CustomVersionDialogListener? {
+        return CustomVersionDialogListener { context: Context, versionBundle: UIData ->
+            val versionDialog = Dialog(context, R.style.MessageDialog)
+            versionDialog.setContentView(R.layout.dy_dialog_version_check)
+            val textView: TextView = versionDialog.findViewById(R.id.tv_msg)
+            textView.text = versionBundle.content
+            versionDialog.setCanceledOnTouchOutside(false)
+            versionDialog
+        }
+    }
+
+    private fun createDownloadingDialog(): CustomDownloadingDialogListener? {
+        return object : CustomDownloadingDialogListener {
+            override fun getCustomDownloadingDialog(
+                context: Context,
+                progress: Int,
+                versionBundle: UIData,
+            ): Dialog {
+                val downloadDialog = Dialog(context!!, R.style.MessageDialog)
+                downloadDialog.setContentView(R.layout.dy_dialog_version_download)
+                return downloadDialog
+            }
+
+            override fun updateUI(dialog: Dialog, progress: Int, versionBundle: UIData) {
+                val tvProgress = dialog.findViewById<TextView>(R.id.tv_progress)
+                val progressBar = dialog.findViewById<ProgressBar>(R.id.pb)
+                progressBar.progress = progress
+                tvProgress.text = getString(R.string.versionchecklib_progress, progress)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        AllenVersionChecker.getInstance().cancelAllMission()
+        super.onDestroy()
+    }
 }

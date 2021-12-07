@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    compileSdkVersion 29
+//    buildToolsVersion "29.0.3"
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 29
+        versionCode 100
+        versionName "1.0.0"
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+    buildTypes {
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation rootProject.ext.deps.appcompat
+    implementation rootProject.ext.deps.okhttp3
+    implementation rootProject.ext.deps.eventBus
+}
+
+ext {
+    PUBLISH_GROUP_ID = "io.github.sirll"        //项目包名
+    PUBLISH_ARTIFACT_ID = 'lib_version'            //项目名
+    PUBLISH_VERSION = "1.0.0"                   //版本号
+}
+
+apply from: '../publish-mavencentral.gradle'

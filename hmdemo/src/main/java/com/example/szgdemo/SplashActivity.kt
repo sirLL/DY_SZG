@@ -16,9 +16,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun openPage() {
-        if (DYHelper.hasLoggedDYHM()) {
+        if (DYHelper.getInstance().hasLoggedDYHM()) {
             //登录过电银泓盟版APP,直接跳转电银泓盟版APP
-            DYHelper.openDYHM(this)
+            DYHelper.getInstance().openDYHM(this)
         } else {
             startActivity(Intent(this, MainActivity::class.java))
         }

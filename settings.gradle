@@ -1,3 +1,4 @@
+include ':lib_version'
 include ':lib_szg'
 include ':hmdemo'
 include ':lib_tablayout'

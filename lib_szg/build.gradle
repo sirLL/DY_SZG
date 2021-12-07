@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 100009
-        versionName "1.0.9"
+        versionCode 100100
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -91,11 +91,12 @@ dependencies {
 //    implementation project(':lib_szg_base')
 //    implementation project(':lib_szg_http')
 //    implementation project(':lib_tablayout')
-    implementation project(':lib_version')
+//    implementation project(':lib_version')
 
     implementation 'io.github.sirll:lib_szg_base:1.0.2'
     implementation 'io.github.sirll:lib_szg_http:1.0.0'
     implementation 'io.github.sirll:lib_tablayout:1.0.2'
+    implementation 'io.github.sirll:lib_version:1.0.0'
 
     //滚动公告
     implementation 'com.sunfusheng:MarqueeView:1.4.1'
@@ -129,6 +130,6 @@ dependencies {
 ext {
     PUBLISH_GROUP_ID = "io.github.sirll"        //项目包名
     PUBLISH_ARTIFACT_ID = 'lib_szg'            //项目名
-    PUBLISH_VERSION = "1.0.9"                   //版本号
+    PUBLISH_VERSION = "1.1.0"                   //版本号
 }
 apply from: '../publish-mavencentral.gradle'

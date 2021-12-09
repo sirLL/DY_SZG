@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.*
 import androidx.core.content.ContextCompat
 import cn.dianyinhuoban.szg.R
+import cn.dianyinhuoban.szg.bean.BalanceTypeBean
 import cn.dianyinhuoban.szg.mvp.bean.BankBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
 import cn.dianyinhuoban.szg.mvp.income.contract.WithdrawContract
@@ -14,6 +15,7 @@ import cn.dianyinhuoban.szg.mvp.income.presenter.WithdrawPresenter
 import cn.dianyinhuoban.szg.util.StringUtil
 import cn.dianyinhuoban.szg.widget.dialog.BaseBottomPicker
 import cn.dianyinhuoban.szg.widget.dialog.PayPwdDialog
+import com.wareroom.lib_base.mvp.IPresenter
 import com.wareroom.lib_base.ui.BaseActivity
 import com.wareroom.lib_base.utils.NumberUtils
 import com.wareroom.lib_base.utils.filter.NumberFilter
@@ -21,8 +23,11 @@ import kotlinx.android.synthetic.main.dy_activity_withdraw.*
 
 class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.View {
     private var mCheckedBankCard: BankBean? = null
-    private var mBalance: Double = 0.0
+    private var mOtherBalance: Double = 0.0
+    private var mActivationBalance: Double = 0.0
     private var mWithdrawTypePicker: WithdrawTypePicker? = null
+    private var mBalanceType: BalanceTypeBean? = null
+    private var mWithdrawBalancePicker: WithdrawBalancePicker? = null
 
     override fun getToolbarColor(): Int {
         return ContextCompat.getColor(WithdrawActivity@ this, R.color.dy_base_color_page_bg)
@@ -48,7 +53,17 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
             showWithdrawTypePicker()
         }
         tv_all.setOnClickListener {
-            val balance = NumberUtils.numberScale(mBalance)
+            val balance = when (mBalanceType?.id) {
+                "1" -> {
+                    NumberUtils.numberScale(mOtherBalance)
+                }
+                "2" -> {
+                    NumberUtils.numberScale(mActivationBalance)
+                }
+                else -> {
+                    NumberUtils.numberScale(0.0)
+                }
+            }
             ed_amount.setText(balance)
             ed_amount.setSelection(balance.length)
         }
@@ -66,7 +81,12 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
                 })
                 .show()
         }
+        cl_balance_type.setOnClickListener {
+            showWithdrawBalancePicker()
+        }
         setupEditText()
+        bindCheckedBalance(BalanceTypeBean("2", "激活返现"))
+
     }
 
     override fun onStart() {
@@ -74,6 +94,34 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
         fetchBalance()
         fetchBankCard()
         fetchWithdrawFee("")
+    }
+
+    private fun showWithdrawBalancePicker() {
+        if (mWithdrawBalancePicker == null) {
+            mWithdrawBalancePicker = WithdrawBalancePicker.newInstance()
+            mWithdrawBalancePicker?.setOnItemSelectedListener(object :
+                BaseBottomPicker.OnItemSelectedListener<BalanceTypeBean, IPresenter?> {
+                override fun onItemSelected(
+                    bottomPicker: BaseBottomPicker<BalanceTypeBean, IPresenter?>,
+                    t: BalanceTypeBean?,
+                    position: Int
+                ) {
+                    bindCheckedBalance(t)
+                }
+            })
+        }
+        mWithdrawBalancePicker?.setCheckedID(mBalanceType?.id)
+        mWithdrawBalancePicker?.show(supportFragmentManager, "WithdrawBalancePicker")
+    }
+
+    private fun bindCheckedBalance(balanceTypeBean: BalanceTypeBean?) {
+        if (balanceTypeBean != null) {
+            tv_balance_type.text = balanceTypeBean.name ?: "--"
+        } else {
+            tv_balance_type.text = ""
+        }
+        mBalanceType = balanceTypeBean
+        bindBalance()
     }
 
     private fun showWithdrawTypePicker() {
@@ -121,7 +169,18 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
         if (amount.isNotEmpty()) {
             amountDouble = amount.toDouble()
         }
-        btn_submit.isEnabled = (amountDouble > 0 && amountDouble <= mBalance)
+        val balance = when (mBalanceType?.id) {
+            "1" -> {
+                mOtherBalance
+            }
+            "2" -> {
+                mActivationBalance
+            }
+            else -> {
+                0.0
+            }
+        }
+        btn_submit.isEnabled = (amountDouble > 0 && amountDouble <= balance && mBalanceType != null)
     }
 
     /************************************个人余额  START***********************************/
@@ -130,14 +189,41 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
     }
 
     override fun bindPersonalData(personalBean: PersonalBean?) {
-        mBalance = if (TextUtils.isEmpty(personalBean?.total)) {
+        val total = if (TextUtils.isEmpty(personalBean?.total)) {
             0.0
         } else {
             NumberUtils.numberScale(personalBean?.total).toDouble()
         }
-        tv_balance.text = NumberUtils.numberScale(mBalance)
+        mActivationBalance = if (TextUtils.isEmpty(personalBean?.personalActive)) {
+            0.0
+        } else {
+            NumberUtils.numberScale(personalBean?.personalActive).toDouble()
+        }
+        val other = total - mActivationBalance
+        mOtherBalance = if (other < 0) {
+            0.0
+        } else {
+            other
+        }
+        bindBalance()
+    }
+
+    private fun bindBalance() {
+        tv_balance.text = when (mBalanceType?.id) {
+            "1" -> {
+                NumberUtils.numberScale(mOtherBalance)
+            }
+            "2" -> {
+                NumberUtils.numberScale(mActivationBalance)
+            }
+            else -> {
+                NumberUtils.numberScale(0.0)
+            }
+        }
         setSubmitButtonEnable()
     }
+
+
     /************************************个人余额  END***********************************/
 
     /************************************提现手续费  START***********************************/
@@ -174,6 +260,7 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
     /************************************发起提现  START*************************************/
     private fun submitWithdraw(password: String) {
         mPresenter?.submitWithdraw(
+            mBalanceType?.id ?: "",
             mCheckedBankCard?.id ?: "",
             NumberUtils.numberScale(ed_amount.text.toString()),
             password

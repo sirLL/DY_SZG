@@ -16,6 +16,7 @@ interface WithdrawContract {
         fun getWithdrawFee(amount: String): Observable<Response<String?>>
 
         fun submitWithdraw(
+            type: String,
             orderID: String,
             amount: String,
             payPassword: String
@@ -30,6 +31,7 @@ interface WithdrawContract {
         fun getWithdrawFee(amount: String)
 
         fun submitWithdraw(
+            type: String,
             bankCardID: String,
             amount: String,
             payPassword: String

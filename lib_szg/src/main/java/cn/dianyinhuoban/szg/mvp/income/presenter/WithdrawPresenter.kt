@@ -76,13 +76,18 @@ class WithdrawPresenter(view: WithdrawContract.View) :
         }
     }
 
-    override fun submitWithdraw(bankCardID: String, amount: String, payPassword: String) {
+    override fun submitWithdraw(
+        type: String,
+        bankCardID: String,
+        amount: String,
+        payPassword: String
+    ) {
         if (!isDestroy) {
             view?.showLoading(false)
         }
         mModel?.let {
             addDispose(
-                it.submitWithdraw(bankCardID, amount, payPassword)
+                it.submitWithdraw(type, bankCardID, amount, payPassword)
                     .compose(SchedulerProvider.getInstance().applySchedulers())
                     .compose(ResponseTransformer.handleResult())
                     .subscribeWith(object : CustomResourceSubscriber<EmptyBean?>() {

@@ -319,6 +319,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST(URLConfig.URL_SUBMIT_WITHDRAW)
     fun submitWithdraw(
+        @Field("type") type: String,
         @Field("bankId") orderID: String,
         @Field("amount") amount: String,
         @Field("payPassword") payPassword: String,

@@ -42,7 +42,8 @@ public class MyApp extends Application {
              */
             @Override
             public String getRequestUrl() {
-                return "http://szgapi.dyhm.shop/user_systemSetting.html";
+                return "";
+//                return "http://szgapi.dyhm.shop/user_systemSetting.html";
             }
 
             /**

@@ -22,12 +22,13 @@ class WithdrawModel : BaseModel(), WithdrawContract.Model {
     }
 
     override fun submitWithdraw(
+        type: String,
         bankCardID: String,
         amount: String,
         payPassword: String
     ): Observable<Response<EmptyBean?>> {
         return mRetrofit.create(ApiService::class.java)
-            .submitWithdraw(bankCardID, amount, payPassword)
+            .submitWithdraw(type, bankCardID, amount, payPassword)
     }
 
     override fun getWithdrawFee(amount: String): Observable<Response<String?>> {

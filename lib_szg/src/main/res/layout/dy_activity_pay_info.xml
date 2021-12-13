@@ -72,7 +72,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
-                    android:ems="6"
+                    android:ems="5"
                     android:text="开户姓名"
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
@@ -120,7 +120,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
-                    android:ems="6"
+                    android:ems="5"
                     android:text="银行账号"
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
@@ -168,7 +168,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
-                    android:ems="6"
+                    android:ems="5"
                     android:text="开户银行"
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
@@ -224,7 +224,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="16dp"
-                    android:ems="6"
+                    android:ems="5"
                     android:text="开户姓名"
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
@@ -263,7 +263,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="16dp"
-                    android:ems="6"
+                    android:ems="5"
                     android:text="银行账号"
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
@@ -303,7 +303,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="16dp"
-                    android:ems="6"
+                    android:ems="5"
                     android:text="开户银行"
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />

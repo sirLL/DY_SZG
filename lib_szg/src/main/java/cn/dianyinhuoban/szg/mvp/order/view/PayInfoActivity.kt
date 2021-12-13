@@ -93,13 +93,13 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         btnSubmit = findViewById(R.id.btn_submit)
 
         findViewById<TextView>(R.id.tv_copy_name).setOnClickListener {
-            copyText((it as TextView).text.toString())
+            copyText(tvName?.text?.toString() ?: "")
         }
         findViewById<TextView>(R.id.tv_copy_account).setOnClickListener {
-            copyText((it as TextView).text.toString())
+            copyText(tvAccount?.text?.toString() ?: "")
         }
         findViewById<TextView>(R.id.tv_copy_bank).setOnClickListener {
-            copyText((it as TextView).text.toString())
+            copyText(tvBankName?.text?.toString() ?: "")
         }
         ivPayInfo?.setOnClickListener {
             showImageDialog()

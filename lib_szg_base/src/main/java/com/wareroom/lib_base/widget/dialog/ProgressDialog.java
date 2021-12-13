@@ -38,7 +38,7 @@ public class ProgressDialog extends Dialog {
     protected void onStart() {
         super.onStart();
         progressWheel.resetCount();
-        progressWheel.setText("电银");
+        progressWheel.setText("盛掌柜");
         progressWheel.startSpinning();
     }
 

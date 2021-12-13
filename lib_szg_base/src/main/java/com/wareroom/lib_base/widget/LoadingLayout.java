@@ -60,7 +60,7 @@ public class LoadingLayout extends FrameLayout {
         ProgressView progressView = mLoadingLayout.findViewById(R.id.base_loading_progress);
         tvMessage.setText(message);
         progressView.resetCount();
-        progressView.setText("电银");
+        progressView.setText("盛掌柜");
         progressView.startSpinning();
         removeAllViews();
         addView(mLoadingLayout);

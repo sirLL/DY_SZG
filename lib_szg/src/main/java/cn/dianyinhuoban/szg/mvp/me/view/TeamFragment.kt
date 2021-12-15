@@ -1,6 +1,5 @@
 package cn.dianyinhuoban.szg.mvp.me.view
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -138,6 +137,11 @@ class TeamFragment : BaseListFragment<MemberBean, TeamContract.Presenter?>(), Te
             } else {
                 View.GONE
             }
+        viewHolder?.itemView?.tv_status?.text = if ("1" == itemData?.isAuth) {
+            "已认证(${itemData.auth_name})"
+        } else {
+            "未认证"
+        }
     }
 
     override fun onItemClick(data: MemberBean?, position: Int) {

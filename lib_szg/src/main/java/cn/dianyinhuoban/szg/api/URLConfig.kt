@@ -2,15 +2,14 @@ package cn.dianyinhuoban.szg.api
 
 interface URLConfig {
     companion object {
+        //网页注册
+        const val PAGE_WEB_REGISTER = "http://szg.ysepay.com/szg/signup/"
 
         //关于我们
         const val PAGE_ABOUT_US = "news_aboutUs.html"
 
         //用户协议
         const val PAGE_USER_AGREEMENT = "news_userAgreement.html"
-
-        //网页注册
-        const val PAGE_WEB_REGISTER = "http://szgm.dyhm.shop/signup/"
 
         //发送短信
         const val URL_SEND_SMS = "sms_aliSms.html"

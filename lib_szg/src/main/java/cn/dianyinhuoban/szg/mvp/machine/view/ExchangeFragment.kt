@@ -105,9 +105,9 @@ class ExchangeFragment :
                 }
             }
             tvLeftTitle?.text = leftBean?.name
-            tvLeftIntegral?.text = leftBean?.point
+            tvLeftIntegral?.text = NumberUtils.formatMoney(leftBean?.point)
             tvRightTitle?.text = rightBean?.name
-            tvRightIntegral?.text = rightBean?.point
+            tvRightIntegral?.text = NumberUtils.formatMoney(rightBean?.point)
             rlLeftContainer?.setTag(R.id.dy_tv_tag,leftBean?.machineTypeId?:"")
             rlRightContainer?.setTag(R.id.dy_tv_tag,rightBean?.machineTypeId?:"")
         }
@@ -167,19 +167,19 @@ class ExchangeFragment :
             }
             val title = StringBuffer()
             if (!itemData?.machine?.act_cashback.isNullOrBlank()) {
-                title.append("激活奖&thinsp;<font color='red'> ${itemData?.machine?.act_cashback}元</font>")
+                title.append("激活奖&thinsp;<font color='red'> ${NumberUtils.formatMoney(itemData?.machine?.act_cashback)}元</font>")
             }
             if (!itemData?.machine?.back_point.isNullOrBlank()) {
                 if (title.isNotBlank()) {
                     title.append("&thinsp;+&thinsp;")
                 }
-                title.append("<font color='red'>${itemData?.machine?.back_point}</font>&thinsp;购机积分")
+                title.append("<font color='red'>${NumberUtils.formatMoney(itemData?.machine?.back_point)}</font>&thinsp;购机积分")
             }
             if (!itemData?.machine?.back_point.isNullOrBlank()) {
                 if (title.isNotBlank()) {
                     title.append("<br/>")
                 }
-                title.append("达标奖&thinsp;<font color='red'>${itemData?.machine?.standard_cashback}</font>&thinsp;元")
+                title.append("达标奖&thinsp;<font color='red'>${NumberUtils.formatMoney(itemData?.machine?.standard_cashback)}</font>&thinsp;元")
             }
             viewHolder?.itemView?.tv_title?.text = Html.fromHtml(title.toString())
             viewHolder?.itemView?.tv_title_des?.text =

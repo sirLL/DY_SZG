@@ -84,7 +84,7 @@ public class GiftDialog extends Dialog {
             money = "0";
         }
         BigDecimal bigDecimal = new BigDecimal(money);
-        return bigDecimal.setScale(2, BigDecimal.ROUND_DOWN).stripTrailingZeros().toPlainString();
+        return bigDecimal.setScale(2, BigDecimal.ROUND_DOWN).stripTrailingZeros().stripTrailingZeros().toPlainString();
     }
 
     public GiftDialog setOnViewClickListener(OnViewClickListener onViewClickListener) {

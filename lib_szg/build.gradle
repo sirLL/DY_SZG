@@ -88,12 +88,12 @@ dependencies {
     implementation rootProject.ext.deps.adapterRxJava
     implementation rootProject.ext.deps.okhttp3Logging
 
-//    implementation project(':lib_szg_base')
+    implementation project(':lib_szg_base')
 //    implementation project(':lib_szg_http')
 //    implementation project(':lib_tablayout')
 //    implementation project(':lib_version')
 
-    implementation 'io.github.sirll:lib_szg_base:1.0.3'
+//    implementation 'io.github.sirll:lib_szg_base:1.0.3'
     implementation 'io.github.sirll:lib_szg_http:1.0.0'
     implementation 'io.github.sirll:lib_tablayout:1.0.2'
     implementation 'io.github.sirll:lib_version:1.0.0'

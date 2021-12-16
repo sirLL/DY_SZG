@@ -8,6 +8,7 @@ import cn.dianyinhuoban.szg.mvp.income.contract.IntegralRecordContract
 import cn.dianyinhuoban.szg.mvp.income.presenter.IntegralRecordPresenter
 import com.wareroom.lib_base.ui.BaseListFragment
 import com.wareroom.lib_base.ui.adapter.SimpleAdapter
+import com.wareroom.lib_base.utils.NumberUtils
 
 class IntegralRecordFragment :
     BaseListFragment<IntegralRecordBean?, IntegralRecordContract.Presenter?>(),
@@ -51,7 +52,7 @@ class IntegralRecordFragment :
         itemData: IntegralRecordBean?
     ) {
         viewHolder?.setText(R.id.tv_sn, "SN:${itemData?.pos_sn ?: "--"}")
-        viewHolder?.setText(R.id.tv_amount, itemData?.value ?: "--")
+        viewHolder?.setText(R.id.tv_amount, NumberUtils.formatMoney(itemData?.value) ?: "--")
         viewHolder?.setText(R.id.tv_date, itemData?.input_time ?: "--")
     }
 

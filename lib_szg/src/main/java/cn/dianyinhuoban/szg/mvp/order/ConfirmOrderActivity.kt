@@ -197,9 +197,9 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
         val num = NumberUtils.string2BigDecimal(mProductNum)
         val price = NumberUtils.string2BigDecimal(mProductPrice)
         tv_amount.text =
-            "¥${num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()}"
+            "¥${num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()}"
         tv_amount_.text =
-            "¥${num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()}"
+            "¥${num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()}"
     }
 
     override fun getPresenter(): CreateOrderPresenter? {
@@ -232,12 +232,12 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
                 val num = NumberUtils.string2BigDecimal(mProductNum)
                 val price = NumberUtils.string2BigDecimal(mProductPrice)
                 val amount =
-                    num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
+                    num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
                 PayInfoActivity.openPayInfoActivity(
                     this,
                     amount,
                     mProductID ?: "",
-                    num.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString(),
+                    num.setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString(),
                     mAddress!!.id ?: "",
                     "6"
                 )

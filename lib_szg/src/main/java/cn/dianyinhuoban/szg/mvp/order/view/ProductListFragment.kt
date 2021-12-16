@@ -66,19 +66,19 @@ class ProductListFragment : BaseListFragment<PurchaseProductBean, ProductListPre
         }
         val title = StringBuffer()
         if (!itemData?.act_cashback.isNullOrBlank()) {
-            title.append("激活奖&thinsp;<font color='red'> ${itemData?.act_cashback}元</font>")
+            title.append("激活奖&thinsp;<font color='red'> ${NumberUtils.formatMoney(itemData?.act_cashback)}元</font>")
         }
         if (!itemData?.back_point.isNullOrBlank()) {
             if (title.isNotBlank()) {
                 title.append("&thinsp;+&thinsp;")
             }
-            title.append("<font color='red'>${itemData?.back_point}</font>&thinsp;购机积分")
+            title.append("<font color='red'>${NumberUtils.formatMoney(itemData?.back_point)}</font>&thinsp;购机积分")
         }
         if (!itemData?.back_point.isNullOrBlank()) {
             if (title.isNotBlank()) {
                 title.append("<br/>")
             }
-            title.append("达标奖&thinsp;<font color='red'>${itemData?.standard_cashback}</font>&thinsp;元")
+            title.append("达标奖&thinsp;<font color='red'>${NumberUtils.formatMoney(itemData?.standard_cashback)}</font>&thinsp;元")
         }
         viewHolder?.itemView?.tv_title?.text = Html.fromHtml(title.toString())
         viewHolder?.itemView?.tv_title_des?.text = if (itemData?.set_meal.isNullOrBlank()) {

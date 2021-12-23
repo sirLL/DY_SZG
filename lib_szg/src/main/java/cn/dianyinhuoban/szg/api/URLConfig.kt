@@ -208,6 +208,9 @@ interface URLConfig {
         //领取红包
         const val URL_GIFT_GET="user_birthdayOpen.html"
 
+        //分润详情
+        const val URL_INCOME_RECORD_DETAIL="bill_billInfo.html"
+
 
     }
 

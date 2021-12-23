@@ -79,8 +79,31 @@
             android:text="LV --"
             android:textColor="@color/color_333333"
             android:textSize="12sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
             app:layout_constraintStart_toStartOf="@id/tv_name" />
+
+        <TextView
+            android:id="@+id/tv_alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="#55ACE0"
+            android:includeFontPadding="false"
+            android:paddingStart="6dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tv_level"
+            app:layout_constraintStart_toEndOf="@id/tv_level"
+            app:layout_constraintTop_toTopOf="@id/tv_level"
+            app:layout_goneMarginBottom="3dp"
+            app:layout_goneMarginStart="0dp"
+            tools:text="大掌柜"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

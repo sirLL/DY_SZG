@@ -17,4 +17,5 @@ data class PersonalBean(
     var username: String?,
     var parentName: String,
     var parentPhone: String,
+    var alias: String?
 )

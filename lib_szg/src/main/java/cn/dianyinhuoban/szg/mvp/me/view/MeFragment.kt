@@ -189,6 +189,17 @@ class MeFragment : BaseFragment<MePresenter?>(), MeContract.View {
             }
             //等级
             tv_level.text = it.title
+            tv_level.visibility = if (it.title.isNullOrEmpty()) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            tv_alias.text = it.alias
+            tv_alias.visibility = if (it.alias.isNullOrEmpty()) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
             //账户总额
             tv_amount.text = NumberUtils.numberScale(it.total)
             //个人收益

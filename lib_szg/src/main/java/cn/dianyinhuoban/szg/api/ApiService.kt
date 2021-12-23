@@ -517,4 +517,13 @@ interface ApiService {
      */
     @GET(URLConfig.URL_GIFT_GET)
     fun submitGetGift(): Observable<Response<EmptyBean?>>
+
+    /**
+     * 分润详情
+     */
+    @FormUrlEncoded
+    @POST(URLConfig.URL_INCOME_RECORD_DETAIL)
+    fun fetchIncomeRecordDetail(
+        @Field("id") id: String
+    ): Observable<Response<IncomeRecordDetailBean?>>
 }

@@ -120,7 +120,11 @@ class IncomeTeamDetailFragment : BaseListFragment<DetailBean, IncomeDetailPresen
         val rate = if (incomeDetail == null) {
             0.0
         } else {
-            BigDecimal(incomeDetail.rate).toDouble()
+            if (incomeDetail.rate.isNullOrBlank()) {
+                0.0
+            } else {
+                BigDecimal(incomeDetail.rate).toDouble()
+            }
         }
         val rateStr = if (rate >= 0) {
             "+${

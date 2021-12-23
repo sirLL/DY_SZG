@@ -7,30 +7,19 @@
     android:background="@color/color_white">
 
     <TextView
-        android:id="@+id/tv_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="--"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="90" />
-
-    <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:maxLines="1"
         android:text="--"
         android:textColor="@color/color_333333"
         android:textSize="16sp"
-        app:layout_constraintBaseline_toBaselineOf="@id/tv_amount"
         app:layout_constraintEnd_toStartOf="@id/tv_amount"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="提现-工商银行(7513)" />
 
     <TextView
@@ -43,24 +32,127 @@
         android:text="--"
         android:textColor="@color/color_999999"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_amount"
         tools:text="提现成功" />
 
     <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="4"
+        android:text="提交金额"
+        android:textColor="@color/color_666666"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:ems="4"
+        android:text="到账金额"
+        android:textColor="@color/color_666666"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv1" />
+
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:ems="4"
+        android:text="提现时间"
+        android:textColor="@color/color_666666"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv2" />
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:ems="4"
+        android:text="结算时间"
+        android:textColor="@color/color_666666"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv3" />
+
+    <TextView
+        android:id="@+id/tv_amount_"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:text="--"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv1"
+        tools:text="90" />
+
+    <TextView
+        android:id="@+id/tv_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:text="--"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv2"
+        tools:text="90" />
+
+
+    <TextView
         android:id="@+id/tv_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        android:maxLines="1"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
         android:text="--"
-        android:textColor="@color/color_999999"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@id/tv_status"
-        app:layout_constraintEnd_toStartOf="@id/tv_status"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="提现成功" />
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv3"
+        tools:text="90" />
+
+    <TextView
+        android:id="@+id/tv_date_"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:text="--"
+        android:textColor="@color/color_333333"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv4"
+        tools:text="90" />
 </androidx.constraintlayout.widget.ConstraintLayout>

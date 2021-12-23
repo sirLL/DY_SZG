@@ -2,6 +2,7 @@ package cn.dianyinhuoban.szg.mvp.order.view
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -11,11 +12,16 @@ import cn.dianyinhuoban.szg.event.PaySuccessEvent
 import cn.dianyinhuoban.szg.mvp.bean.PurchaseProductBean
 import cn.dianyinhuoban.szg.mvp.order.ConfirmOrderActivity
 import coil.load
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.wareroom.lib_base.mvp.IPresenter
 import com.wareroom.lib_base.ui.BaseActivity
+import com.wareroom.lib_base.utils.DimensionUtils
 import com.wareroom.lib_base.utils.NumberUtils
 import com.wareroom.lib_base.utils.filter.NumberFilter
 import kotlinx.android.synthetic.main.dy_activity_product_detail.*
+import kotlinx.android.synthetic.main.dy_item_share.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -114,7 +120,10 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
                     val price = NumberUtils.string2BigDecimal(mProduct?.price)
                     val amount = num.multiply(price)
                     tv_amount.text =
-                        "¥${amount.setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()}"
+                        "¥${
+                            amount.setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros()
+                                .toPlainString()
+                        }"
                 }
             }
 
@@ -126,13 +135,29 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
             crossfade(true)
         }
         tv_title.text = mProduct?.name ?: "--"
-        tv_detail.text = mProduct?.describe ?: "--"
         tv_price.text = if (TextUtils.isEmpty(mProduct?.price)) {
             "--"
         } else {
             "¥${NumberUtils.numberScale(mProduct?.price)}"
         }
         tv_count.setText("1")
+        Glide.with(this).asBitmap().load(mProduct?.desc_img).into(object : SimpleTarget<Bitmap>() {
+            override fun onResourceReady(
+                resource: Bitmap,
+                transition: Transition<in Bitmap>?
+            ) {
+                if (resource.width > 0) {
+                    var rate = resource.height * 1f / resource.width
+                    var dp2px32 = DimensionUtils.dp2px(this@ProductDetailActivity, 32)
+                    var screenWidth = DimensionUtils.getScreenWidth(this@ProductDetailActivity)
+                    var height = rate * (screenWidth - dp2px32)
+                    var lp = iv_detail.layoutParams
+                    lp.height = height.toInt()
+                    iv_detail.layoutParams = lp
+                }
+                iv_detail?.setImageBitmap(resource)
+            }
+        })
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

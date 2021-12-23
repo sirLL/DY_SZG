@@ -7,14 +7,26 @@ import io.reactivex.Observable
 
 interface WithdrawRecordContract {
     interface Model {
-        fun fetchWithdrawRecord(page: Int): Observable<Response<List<WithdrawRecordBean>?>>
+        fun fetchWithdrawRecord(
+            startTime: String,
+            endTime: String,
+            type:String,
+            status:String,
+            page: Int
+        ): Observable<Response<List<WithdrawRecordBean>?>>
     }
 
     interface Presenter {
-        fun fetchWithdrawRecord(page: Int)
+        fun fetchWithdrawRecord(
+            startTime: String,
+            endTime: String,
+            type:String,
+            status:String,
+            page: Int
+        )
     }
 
-    interface View :IView{
+    interface View : IView {
         fun bindWithdrawRecord(recordData: List<WithdrawRecordBean>?)
     }
 }

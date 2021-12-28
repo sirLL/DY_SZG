@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import cn.dianyinhuoban.szg.R
+import cn.dianyinhuoban.szg.mvp.WebActivity
 import cn.dianyinhuoban.szg.mvp.bean.NotifyMessageBean
 import cn.dianyinhuoban.szg.mvp.order.OrderDetailActivity
 import cn.dianyinhuoban.szg.mvp.pk.contract.PKContract
@@ -249,6 +250,12 @@ class MessageNotifyFragment : BaseFragment<MessagePresenter>(), MessageContract.
                 }
 
 
+            }
+
+            holder.itemView.setOnClickListener {
+                if (!data.url.isNullOrEmpty()) {
+                    WebActivity.openWebActivity(requireContext(), data.title, data.url)
+                }
             }
         }
 

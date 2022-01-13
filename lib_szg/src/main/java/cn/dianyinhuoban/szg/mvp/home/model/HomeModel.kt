@@ -3,6 +3,7 @@ package cn.dianyinhuoban.szg.mvp.home.model
 import cn.dianyinhuoban.szg.api.ApiService
 import cn.dianyinhuoban.szg.bean.CustomModel
 import cn.dianyinhuoban.szg.bean.GiftInfoBean
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.bean.BannerBean
 import cn.dianyinhuoban.szg.mvp.bean.HomeDataBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
@@ -39,6 +40,11 @@ class HomeModel : BaseModel(),
 
     override fun fetchGiftInfo(): Observable<Response<GiftInfoBean?>> {
         return mRetrofit.create(ApiService::class.java).fetchGiftInfo()
+    }
+
+    override fun fetchAuthResult(): Observable<Response<AuthResult?>> {
+        return mRetrofit.create(ApiService::class.java)
+            .fetchAuthResult()
     }
 
 }

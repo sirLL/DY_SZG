@@ -40,17 +40,83 @@
 
         <TextView
             android:id="@+id/tv_nick"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:maxLines="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:ellipsize="end"
+            android:maxEms="10"
+            android:singleLine="true"
+            android:text="--"
             android:textColor="@color/color_333333"
-            android:textSize="22sp"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/iv_avatar"
+            app:layout_constraintTop_toTopOf="@id/iv_avatar"
+            tools:text="娃哈哈" />
+
+        <TextView
+            android:id="@+id/tv_realname_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/dy_shape_27a4ff_radius_2"
+            android:includeFontPadding="false"
+            android:paddingStart="6dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_nick"
+            app:layout_constraintStart_toEndOf="@id/tv_nick"
+            app:layout_constraintTop_toTopOf="@id/tv_nick"
+            tools:text="已认证" />
+
+        <TextView
+            android:id="@+id/tv_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:background="@drawable/dy_ic_me_level"
+            android:gravity="center_vertical"
+            android:text="LV --"
+            android:textColor="@color/color_333333"
+            android:textSize="10sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
+            app:layout_constraintStart_toStartOf="@id/tv_nick" />
+
+        <TextView
+            android:id="@+id/tv_alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="#55ACE0"
+            android:includeFontPadding="false"
+            android:paddingStart="6dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tv_level"
+            app:layout_constraintStart_toEndOf="@id/tv_level"
+            app:layout_constraintTop_toTopOf="@id/tv_level"
+            app:layout_goneMarginBottom="3dp"
+            app:layout_goneMarginStart="0dp"
+            tools:text="大掌柜"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_share"
+            app:layout_constraintEnd_toStartOf="@id/tv_nick"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Hi 王饱饱" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -64,7 +130,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"

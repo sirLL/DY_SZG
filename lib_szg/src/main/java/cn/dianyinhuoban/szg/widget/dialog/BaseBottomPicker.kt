@@ -1,8 +1,11 @@
 package cn.dianyinhuoban.szg.widget.dialog
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import cn.dianyinhuoban.szg.R
@@ -72,12 +75,23 @@ abstract class BaseBottomPicker<D, P : IPresenter?> : DialogFragment(), OnRefres
         mOnItemSelectedListener = itemSelectedListener
     }
 
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+//        dialog.window?.setWindowAnimations(R.style.DYBaseBottomDialogFragment)
+        return dialog
+    }
+
     override fun onStart() {
         super.onStart()
-        val window = dialog?.window
-        val layoutParams = window?.attributes
-        setWindowLayoutParams(layoutParams, window)
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog?.window?.attributes?.gravity = Gravity.BOTTOM
+        dialog?.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
+
 
     protected open fun showLoadingView() {
         loading_layout.showLoading()

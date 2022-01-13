@@ -42,7 +42,6 @@ class ProductListParentFragment : BaseFragment<MachineTypePresenter?>(), Machine
         contentView?.findViewById<TextView>(R.id.tv_order)?.setOnClickListener {
             OrderListActivity.open(requireContext())
         }
-        Log.d("ProductList", "initView: ${mPresenter==null}")
         mPresenter?.fetchMachineType()
     }
 

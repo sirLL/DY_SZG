@@ -35,7 +35,8 @@ class OfflinePayModel : BaseModel(), OfflinePayContract.Model {
         bankNo: String,
         bankName: String,
         voucher: String,
-        password: String
+        password: String,
+        payMethod: String
     ): Observable<Response<PayInfoBean?>> {
         return mRetrofit.create(ApiService::class.java)
             .submitPurchaseOrder(
@@ -47,7 +48,8 @@ class OfflinePayModel : BaseModel(), OfflinePayContract.Model {
                 bankNo,
                 bankName,
                 voucher,
-                password
+                password,
+                payMethod
             )
     }
 }

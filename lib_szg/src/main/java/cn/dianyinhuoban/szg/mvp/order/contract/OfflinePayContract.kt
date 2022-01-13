@@ -24,7 +24,8 @@ interface OfflinePayContract {
             bankNo: String,
             bankName: String,
             voucher: String,
-            password: String
+            password: String,
+            payMethod: String
         ): Observable<Response<PayInfoBean?>>
     }
 
@@ -39,7 +40,8 @@ interface OfflinePayContract {
             bankNo: String,
             bankName: String,
             voucher: String,
-            password: String
+            password: String,
+            payMethod: String
         )
 
         fun uploadVoucher(file: File)

@@ -11,7 +11,6 @@ import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.event.PaySuccessEvent
 import cn.dianyinhuoban.szg.mvp.bean.PurchaseProductBean
 import cn.dianyinhuoban.szg.mvp.order.ConfirmOrderActivity
-import coil.load
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
@@ -131,9 +130,6 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
     }
 
     private fun bindDetail() {
-        iv_cover.load(mProduct?.img ?: "") {
-            crossfade(true)
-        }
         tv_title.text = mProduct?.name ?: "--"
         tv_price.text = if (TextUtils.isEmpty(mProduct?.price)) {
             "--"
@@ -141,6 +137,22 @@ class ProductDetailActivity : BaseActivity<IPresenter?>() {
             "¥${NumberUtils.numberScale(mProduct?.price)}"
         }
         tv_count.setText("1")
+
+        Glide.with(this).asBitmap().load(mProduct?.img).into(object : SimpleTarget<Bitmap>() {
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                iv_cover.setImageBitmap(resource)
+                var lp = iv_cover.layoutParams
+                var screenWidth = DimensionUtils.getScreenWidth(this@ProductDetailActivity)
+                var height = 0
+                if (resource.height > 0 && resource.width > 0) {
+                    height = (resource.height * 1.0f / resource.width * screenWidth).toInt()
+                }
+                lp.height = height
+                lp.width = screenWidth
+                iv_cover.layoutParams = lp
+            }
+        })
+
         Glide.with(this).asBitmap().load(mProduct?.desc_img).into(object : SimpleTarget<Bitmap>() {
             override fun onResourceReady(
                 resource: Bitmap,

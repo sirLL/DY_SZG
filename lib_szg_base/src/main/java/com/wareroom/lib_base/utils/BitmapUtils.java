@@ -57,12 +57,11 @@ public class BitmapUtils {
         try {
             out = new FileOutputStream(file);
             // 格式为 JPEG，照相机拍出的图片为JPEG格式的，PNG格式的不能显示在相册中
-            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)) {
+            if (bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)) {
                 out.flush();
                 out.close();
                 // 插入图库
-                MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                        file.getAbsolutePath(), fileName, null);
+//                MediaStore.Images.Media.insertImage(context.getContentResolver(),bitmap,"fileName","");
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -70,7 +69,7 @@ public class BitmapUtils {
             e.printStackTrace();
         }
         // 发送广播，通知刷新图库的显示
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + savePath)));
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         return savePath;
     }
 

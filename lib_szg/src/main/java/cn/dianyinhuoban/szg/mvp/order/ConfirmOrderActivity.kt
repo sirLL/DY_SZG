@@ -22,7 +22,6 @@ import cn.dianyinhuoban.szg.widget.dialog.BaseBottomPicker
 import cn.dianyinhuoban.szg.widget.dialog.PayPwdDialog
 import cn.dianyinhuoban.szg.widget.dialog.PayTypePicker
 import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.wareroom.lib_base.ui.BaseActivity
 import com.wareroom.lib_base.utils.DimensionUtils
 import com.wareroom.lib_base.utils.NumberUtils
@@ -238,8 +237,7 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
                     amount,
                     mProductID ?: "",
                     num.setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString(),
-                    mAddress!!.id ?: "",
-                    "6"
+                    mAddress!!.id ?: ""
                 )
             }
         }

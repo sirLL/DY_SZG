@@ -207,7 +207,8 @@ interface ApiService {
         @Field("pay_bank_no") bankNo: String,
         @Field("pay_bank_name") bankName: String,
         @Field("payment_voucher") voucher: String,
-        @Field("payPassword") password: String
+        @Field("payPassword") password: String,
+        @Field("payMethod") payMethod: String
     ): Observable<Response<PayInfoBean?>>
 
 

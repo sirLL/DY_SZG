@@ -24,7 +24,7 @@ class CreateOrderModel : BaseModel(), CreateOrderContract.Model {
         bankNo: String,
         bankName: String,
         voucher: String,
-        password: String
+        password: String,
     ): Observable<Response<PayInfoBean?>> {
         return mRetrofit.create(ApiService::class.java)
             .submitPurchaseOrder(
@@ -36,7 +36,8 @@ class CreateOrderModel : BaseModel(), CreateOrderContract.Model {
                 bankNo,
                 bankName,
                 voucher,
-                password
+                password,
+              ""
             )
     }
 }

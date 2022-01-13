@@ -24,7 +24,6 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="fitCenter"
-                app:layout_constraintDimensionRatio="w,4:3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -40,18 +39,17 @@
 
             <TextView
                 android:id="@+id/tv_title"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="--"
                 android:textColor="@color/color_333333"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/divider" />
 
@@ -59,16 +57,15 @@
                 android:id="@+id/tv_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:text="--"
                 android:textColor="@color/color_f60e36"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title" />
+                app:layout_constraintStart_toEndOf="@id/tv_title"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_title" />
 
             <ImageView
                 android:id="@+id/iv_detail"
@@ -83,7 +80,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_price" />
+                app:layout_constraintTop_toBottomOf="@id/tv_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

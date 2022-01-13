@@ -78,7 +78,8 @@ class OfflinePayPresenter(view: OfflinePayContract.View) :
         bankNo: String,
         bankName: String,
         voucher: String,
-        password: String
+        password: String,
+        payMethod: String
     ) {
         if (!isDestroy) {
             view?.showLoading()
@@ -93,7 +94,8 @@ class OfflinePayPresenter(view: OfflinePayContract.View) :
                     bankNo,
                     bankName,
                     voucher,
-                    password
+                    password,
+                    payMethod
                 )
                     .compose(SchedulerProvider.getInstance().applySchedulers())
                     .compose(ResponseTransformer.handleResult())

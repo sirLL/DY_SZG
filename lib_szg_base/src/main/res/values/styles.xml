@@ -9,7 +9,7 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="DYBaseBottomDialogFragment">
+    <style name="DYBaseBottomDialogFragment" parent="@android:style/Animation.Activity">
         <item name="android:windowEnterAnimation">@anim/dy_anim_dialog_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/dy_anim_dialog_bottom_out</item>
     </style>

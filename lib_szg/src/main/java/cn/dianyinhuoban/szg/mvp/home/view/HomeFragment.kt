@@ -11,6 +11,7 @@ import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.bean.CustomModel
 import cn.dianyinhuoban.szg.bean.GiftInfoBean
 import cn.dianyinhuoban.szg.mvp.WebHtmlActivity
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.bean.BannerBean
 import cn.dianyinhuoban.szg.mvp.bean.HomeDataBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
@@ -22,6 +23,8 @@ import cn.dianyinhuoban.szg.mvp.income.view.IncomePersonalDetailActivity
 import cn.dianyinhuoban.szg.mvp.income.view.IncomeTeamDetailActivity
 import cn.dianyinhuoban.szg.mvp.setting.view.MessageActivity
 import cn.dianyinhuoban.szg.widget.dialog.BannerDialog
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
@@ -30,9 +33,7 @@ import com.wareroom.lib_base.ui.BaseFragment
 import com.wareroom.lib_base.utils.NumberUtils
 import com.wareroom.lib_base.utils.cache.MMKVUtil
 import com.youth.banner.indicator.CircleIndicator
-import kotlinx.android.synthetic.main.dy_base_bottom_picker.*
 import kotlinx.android.synthetic.main.dy_fragment_home.*
-import kotlinx.android.synthetic.main.dy_fragment_home.refresh_layout
 import kotlinx.android.synthetic.main.dy_item_home_personal_income.*
 import kotlinx.android.synthetic.main.dy_item_home_pk_personal.*
 import kotlinx.android.synthetic.main.dy_item_home_pk_team.*
@@ -185,6 +186,7 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
         mPresenter?.fetchHomeData()
         mPresenter?.fetchNoticeList()
         mPresenter?.fetchBanner()
+        mPresenter?.fetchAuthResult()
     }
 
     override fun bindHomeData(homeDataBean: HomeDataBean?) {
@@ -406,6 +408,28 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
 
     override fun bindPersonalData(personalBean: PersonalBean?) {
         MMKVUtil.saveIsTeamLeader(personalBean?.isTeamLeader == 2)
+        iv_avatar.load(personalBean?.avatar) {
+            crossfade(true)//淡入效果
+            allowHardware(false)
+            placeholder(R.drawable.dy_img_avatar_def)
+            error(R.drawable.dy_img_avatar_def)
+            transformations(CircleCropTransformation())
+        }
+
+        //等级
+        tv_level.text = personalBean?.title ?: ""
+        tv_level.visibility = if (personalBean?.title.isNullOrEmpty()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
+        tv_alias.text = personalBean?.alias ?: ""
+        tv_alias.visibility = if (personalBean?.alias.isNullOrEmpty()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
+
 //        if (personalBean?.isTeamLeader == 2) {
 //            //当前用户是团队长
 //            tv_team_name.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -427,11 +451,23 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
     override fun bindGiftInfo(data: GiftInfoBean) {
         data?.let {
             if (!it.money.isNullOrBlank()) {
-                startActivity(Intent(requireContext(),GiftActivity::class.java))
+                startActivity(Intent(requireContext(), GiftActivity::class.java))
             }
         }
     }
-
+    override fun bindAuthResult(authResult: AuthResult) {
+        when (authResult.status) {
+            "0" -> {
+                tv_realname_status?.text = "审核中"
+            }
+            "2" -> {
+                tv_realname_status?.text = "已认证"
+            }
+            else -> {
+                tv_realname_status?.text = "未认证"
+            }
+        }
+    }
     override fun onDestroyView() {
         mBannerDialog?.let {
             if (it.isShowing) {

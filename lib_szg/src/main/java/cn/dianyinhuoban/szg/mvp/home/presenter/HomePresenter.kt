@@ -3,6 +3,7 @@ package cn.dianyinhuoban.szg.mvp.home.presenter
 import com.wareroom.lib_http.CustomResourceSubscriber
 import cn.dianyinhuoban.szg.bean.CustomModel
 import cn.dianyinhuoban.szg.bean.GiftInfoBean
+import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.bean.BannerBean
 import cn.dianyinhuoban.szg.mvp.bean.HomeDataBean
 import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
@@ -155,6 +156,30 @@ class HomePresenter(view: HomeContract.View) : BasePresenter<HomeModel, HomeCont
                         }
                     }
                 })
+        }
+    }
+
+    override fun fetchAuthResult() {
+        mModel?.let {
+            addDispose(
+                it.fetchAuthResult()
+                    .compose(SchedulerProvider.getInstance().applySchedulers())
+                    .compose(ResponseTransformer.handleResult())
+                    .subscribeWith(object : CustomResourceSubscriber<AuthResult?>() {
+                        override fun onError(exception: ApiException?) {
+                            if (!isDestroy) {
+                                handleError(exception)
+                            }
+                        }
+
+                        override fun onNext(t: AuthResult) {
+                            super.onNext(t)
+                            if (!isDestroy) {
+                                view?.bindAuthResult(t)
+                            }
+                        }
+                    })
+            )
         }
     }
 }

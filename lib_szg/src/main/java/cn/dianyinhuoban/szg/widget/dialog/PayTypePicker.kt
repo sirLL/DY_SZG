@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cn.dianyinhuoban.szg.R
-import cn.dianyinhuoban.szg.mvp.bean.AuthResult
-import cn.dianyinhuoban.szg.mvp.bean.IntegralBalanceBean
-import cn.dianyinhuoban.szg.mvp.bean.PayTypeBean
-import cn.dianyinhuoban.szg.mvp.bean.PersonalBean
+import cn.dianyinhuoban.szg.mvp.bean.*
 import cn.dianyinhuoban.szg.mvp.me.contract.MeContract
 import cn.dianyinhuoban.szg.mvp.me.presenter.MePresenter
+import cn.dianyinhuoban.szg.mvp.order.contract.PayTypeContract
+import cn.dianyinhuoban.szg.mvp.order.presenter.PayTypePresenter
 import coil.load
 import com.wareroom.lib_base.ui.adapter.SimpleAdapter
 import com.wareroom.lib_base.utils.NumberUtils
 import kotlinx.android.synthetic.main.dy_item_pay_type_picker.view.*
 
-class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.View {
+class PayTypePicker : BaseBottomPicker<PayTypeBean?, PayTypeContract.Presenter>(),
+    PayTypeContract.View {
     companion object {
         fun newInstance(machineType: String): PayTypePicker {
             val args = Bundle()
@@ -29,6 +29,8 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
 
     private var mCheckedPosition = -1
     private var machineType: String = ""
+    private var mOfflinePayInfo: OfflinePayInfoBean? = null
+    private var mIntegralData: List<IntegralBalanceBean>? = null
 
     override fun getTitle(): String {
         return "选择支付方式"
@@ -42,8 +44,8 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
         return R.layout.dy_item_pay_type_picker
     }
 
-    override fun getPresenter(): MePresenter {
-        return MePresenter(this)
+    override fun getPresenter(): PayTypeContract.Presenter {
+        return PayTypePresenter(this)
     }
 
     override fun onCreateView(
@@ -54,6 +56,7 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
         machineType = arguments?.getString("machineType", "") ?: ""
         return super.onCreateView(inflater, container, savedInstanceState)
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -108,15 +111,23 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
     }
 
     override fun request(page: Int) {
-        mPresenter?.fetchPersonalData()
         mPresenter?.fetchIntegralBalance(machineType)
+        mPresenter?.fetchOfflinePayInfo()
     }
 
-    override fun bindPersonalData(personalBean: PersonalBean?) {
-
-    }
 
     override fun bindIntegralBalance(data: List<IntegralBalanceBean>?) {
+        mIntegralData = data
+        buildData()
+
+    }
+
+    override fun bindOfflinePayInfo(payInfoBean: OfflinePayInfoBean?) {
+        mOfflinePayInfo = payInfoBean
+        buildData()
+    }
+
+    private fun buildData() {
         val payTypeData = mutableListOf<PayTypeBean?>()
 //        payTypeData.add(
 //            PayTypeBean(
@@ -127,7 +138,7 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
 //            )
 //        )
         var integralBalanceBean: IntegralBalanceBean? = null
-        data?.let {
+        mIntegralData?.let {
             for (bean in it) {
                 if (machineType == bean.machineTypeId) {
                     integralBalanceBean = bean
@@ -151,20 +162,31 @@ class PayTypePicker : BaseBottomPicker<PayTypeBean?, MePresenter>(), MeContract.
 //                "0"
 //            )
 //        )
+        mOfflinePayInfo?.let {
+            if ("1" == it.payType || "3" == it.payType) {
+                payTypeData.add(
+                    PayTypeBean(
+                        6,
+                        R.drawable.dy_ic_pay_type_offline,
+                        "现金支付",
+                        "0"
+                    )
+                )
+            }
 
-        payTypeData.add(
-            PayTypeBean(
-                6,
-                R.drawable.dy_ic_pay_type_offline,
-                "现金支付",
-                "0"
-            )
-        )
+            if ("2" == it.payType || "3" == it.payType) {
+                payTypeData.add(
+                    PayTypeBean(
+                        7,
+                        R.drawable.dy_ic_pay_type_scan,
+                        "扫码支付",
+                        "0"
+                    )
+                )
+            }
+        }
+
         loadData(payTypeData)
-    }
-
-    override fun bindAuthResult(authResult: AuthResult) {
-
     }
 
 }

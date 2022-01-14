@@ -127,7 +127,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/dy_shape_248eff_27a4ff_angle_45_radius_4">
+                android:background="@drawable/dy_shape_2f7df9_radius_4">
 
                 <TextView
                     android:id="@+id/textView1"
@@ -165,12 +165,12 @@
                     android:id="@+id/tv_amount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="32dp"
                     android:maxLines="1"
                     android:text="--"
                     android:textColor="@color/color_white"
-                    android:textSize="26sp"
+                    android:textSize="28sp"
                     app:layout_constraintEnd_toStartOf="@id/tv_withdraw"
                     app:layout_constraintStart_toStartOf="@id/textView1"
                     app:layout_constraintTop_toBottomOf="@id/textView1" />
@@ -179,7 +179,7 @@
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="个人收益/元:"
                     android:textColor="@color/color_white"
                     android:textSize="12sp"
@@ -206,9 +206,9 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/dy_shape_4affffff_radius_6"
                     android:paddingStart="16dp"
-                    android:paddingTop="8dp"
+                    android:paddingTop="6dp"
                     android:paddingEnd="16dp"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="6dp"
                     android:text="提现"
                     android:textColor="@color/color_white"
                     android:textSize="14sp"
@@ -219,12 +219,12 @@
                 <View
                     android:id="@+id/divider1"
                     android:layout_width="0dp"
-                    android:layout_height="0.5dp"
+                    android:layout_height="1dp"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="26dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="12dp"
                     android:alpha="0.1"
-                    android:background="@color/color_979797"
+                    android:background="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView2" />
@@ -237,10 +237,12 @@
                     android:alpha="0.8"
                     android:text="团队收益/元"
                     android:textColor="@color/color_white"
+                    android:gravity="start"
                     android:textSize="10sp"
                     app:layout_constraintEnd_toStartOf="@id/textView4"
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <TextView
@@ -251,6 +253,7 @@
                     android:alpha="0.8"
                     android:gravity="center"
                     android:text="激活返现/元"
+                    android:layout_marginTop="12dp"
                     android:textColor="@color/color_white"
                     android:textSize="10sp"
                     app:layout_constraintEnd_toStartOf="@id/textView5"
@@ -266,6 +269,7 @@
                     android:layout_marginEnd="12dp"
                     android:alpha="0.8"
                     android:gravity="end"
+                    android:layout_marginTop="12dp"
                     android:text="采购奖励/元"
                     android:textColor="@color/color_white"
                     android:textSize="10sp"

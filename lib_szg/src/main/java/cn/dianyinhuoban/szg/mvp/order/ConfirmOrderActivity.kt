@@ -13,6 +13,7 @@ import cn.dianyinhuoban.szg.mvp.bean.AddressBean
 import cn.dianyinhuoban.szg.mvp.bean.PayTypeBean
 import cn.dianyinhuoban.szg.mvp.me.presenter.MePresenter
 import cn.dianyinhuoban.szg.mvp.order.contract.CreateOrderContract
+import cn.dianyinhuoban.szg.mvp.order.contract.PayTypeContract
 import cn.dianyinhuoban.szg.mvp.order.presenter.CreateOrderPresenter
 import cn.dianyinhuoban.szg.mvp.order.view.AddressManagerActivity
 import cn.dianyinhuoban.szg.mvp.order.view.PayInfoActivity
@@ -158,9 +159,9 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
         if (mPayTypePicker == null) {
             mPayTypePicker = PayTypePicker.newInstance(mMachineType)
             mPayTypePicker?.setOnItemSelectedListener(object :
-                BaseBottomPicker.OnItemSelectedListener<PayTypeBean?, MePresenter> {
+                BaseBottomPicker.OnItemSelectedListener<PayTypeBean?, PayTypeContract.Presenter> {
                 override fun onItemSelected(
-                    bottomPicker: BaseBottomPicker<PayTypeBean?, MePresenter>,
+                    bottomPicker: BaseBottomPicker<PayTypeBean?, PayTypeContract.Presenter>,
                     t: PayTypeBean?,
                     position: Int,
                 ) {
@@ -196,9 +197,15 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
         val num = NumberUtils.string2BigDecimal(mProductNum)
         val price = NumberUtils.string2BigDecimal(mProductPrice)
         tv_amount.text =
-            "¥${num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()}"
+            "¥${
+                num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros()
+                    .toPlainString()
+            }"
         tv_amount_.text =
-            "¥${num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()}"
+            "¥${
+                num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros()
+                    .toPlainString()
+            }"
     }
 
     override fun getPresenter(): CreateOrderPresenter? {
@@ -227,17 +234,23 @@ class ConfirmOrderActivity : BaseActivity<CreateOrderPresenter?>(), CreateOrderC
                 showPasswordSubmitOrder()
             } else if (it.id == 5L) {
                 submitOrder("")
-            } else if (it.id == 6L) {
+            } else if (it.id == 6L || it.id == 7L) {
                 val num = NumberUtils.string2BigDecimal(mProductNum)
                 val price = NumberUtils.string2BigDecimal(mProductPrice)
                 val amount =
-                    num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()
+                    num.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros()
+                        .toPlainString()
                 PayInfoActivity.openPayInfoActivity(
                     this,
                     amount,
                     mProductID ?: "",
                     num.setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString(),
-                    mAddress!!.id ?: ""
+                    mAddress!!.id ?: "",
+                    if (it.id == 6L) {
+                        "1"
+                    } else {
+                        "2"
+                    }
                 )
             }
         }

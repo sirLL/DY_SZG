@@ -52,7 +52,8 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
             amount: String,
             productID: String,
             productNum: String,
-            addressID: String
+            addressID: String,
+            payMethod: String
         ) {
             val intent = Intent(context, PayInfoActivity::class.java)
             val bundle = Bundle()
@@ -60,6 +61,7 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
             bundle.putString("productNum", productNum)
             bundle.putString("addressID", addressID)
             bundle.putString("amount", amount)
+            bundle.putString("payMethod", payMethod)
             intent.putExtras(bundle)
             context.startActivity(intent)
         }
@@ -70,7 +72,7 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
     private var productNum: String = ""
     private var addressID: String = ""
     private var voucherURL: String? = null
-    private var payType: PayTypeBean? = null
+    private var payMethod: String? = null
 
     private var tvAmount: TextView? = null
     private var tvName: TextView? = null
@@ -89,10 +91,6 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
     private var alipayContainer: LinearLayout? = null
     private var bankContainer: LinearLayout? = null
 
-    private var payTypePicker: OptionPicker? = null
-    private val payTypeData by lazy {
-        mutableListOf<PayTypeBean>()
-    }
     private val qrDialog by lazy {
         ImageDialog(this)
     }
@@ -103,15 +101,12 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         productID = bundle?.getString("productID", "") ?: ""
         productNum = bundle?.getString("productNum", "") ?: ""
         addressID = bundle?.getString("addressID", "") ?: ""
+        payMethod = bundle?.getString("payMethod", "") ?: ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dy_activity_pay_info)
-        setTitle("现金支付")
-
-        payTypeData.add(PayTypeBean("1", "银行卡"))
-        payTypeData.add(PayTypeBean("2", "支付宝扫码"))
 
         tvAmount = findViewById(R.id.tv_amount)
         tvName = findViewById(R.id.tv_name)
@@ -163,9 +158,6 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         edPayAccount?.addTextChangedListener(textWatcher)
         edPayBank?.addTextChangedListener(textWatcher)
 
-        payTypeContainer?.setOnClickListener {
-            showPayTypePicker()
-        }
         ivQR?.setOnClickListener {
             qrDialog.show()
         }
@@ -177,6 +169,8 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         }
 
         tvAmount?.text = "${NumberUtils.numberScale(amount)}元"
+
+        showPayTypeUI()
         mPresenter?.fetchOfflinePayInfo()
     }
 
@@ -190,61 +184,56 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
     }
 
     override fun bindOfflinePayInfo(payInfoBean: OfflinePayInfoBean?) {
-        tvName?.text = payInfoBean?.name ?: ""
-        tvAccount?.text = payInfoBean?.bankNo ?: ""
-        tvBankName?.text = payInfoBean?.bankName ?: ""
-//        ivQR?.load(payInfoBean?.aliPay)
-        ivQR?.let {
-            Glide.with(this)
-                .asBitmap()
-                .load(payInfoBean?.aliPay ?: "")
-                .into(object : SimpleTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        it.setImageBitmap(resource)
-                    }
-                })
-        }
-
-        qrDialog.setImagePath(payInfoBean?.aliPay)
-
-        payTypeContainer?.visibility = if ("3" == payInfoBean?.payType) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-        var payType: PayTypeBean? = null
-        if ("1" == payInfoBean?.payType || "3" == payInfoBean?.payType) {
-            payTypeData.forEach {
-                if (it.id == "1") {
-                    payType = it
-                }
+        if (payMethod == "1") {
+            tvName?.text = payInfoBean?.name ?: ""
+            tvAccount?.text = payInfoBean?.bankNo ?: ""
+            tvBankName?.text = payInfoBean?.bankName ?: ""
+        } else if (payMethod == "2") {
+            ivQR?.let {
+                Glide.with(this)
+                    .asBitmap()
+                    .load(payInfoBean?.aliPay ?: "")
+                    .into(object : SimpleTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            it.setImageBitmap(resource)
+                        }
+                    })
             }
-        } else if ("2" == payInfoBean?.payType) {
-            payTypeData.forEach {
-                if (it.id == "2") {
-                    payType = it
-                }
-            }
+
+            qrDialog.setImagePath(payInfoBean?.aliPay)
         }
-        showPayTypeUI(payType)
     }
 
-    private fun showPayTypeUI(payType: PayTypeBean?) {
-        this.payType = payType
-        when (payType?.id) {
+    private fun showPayTypeUI() {
+        setTitle(
+            when (payMethod) {
+                "1" -> {
+                    "现金支付"
+                }
+                "2" -> {
+                    "扫码支付"
+                }
+                else -> {
+                    ""
+                }
+            }
+        )
+
+        when (payMethod) {
             "1" -> {
                 //银行卡
                 bankContainer?.visibility = View.VISIBLE
                 alipayContainer?.visibility = View.GONE
                 voucherContainer?.visibility = View.VISIBLE
-                tvPayType?.text = payType?.name
             }
             "2" -> {
                 //支付宝扫码
                 bankContainer?.visibility = View.GONE
                 alipayContainer?.visibility = View.VISIBLE
                 voucherContainer?.visibility = View.VISIBLE
-                tvPayType?.text = payType?.name
             }
             else -> {
                 bankContainer?.visibility = View.GONE
@@ -340,7 +329,7 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         val name = edPayName?.text?.toString()
         val no = edPayAccount?.text?.toString()
         val bank = edPayBank?.text?.toString()
-        when (payType?.id) {
+        when (payMethod) {
             "1" -> {
                 btnSubmit?.isEnabled =
                     !amount.isNullOrBlank() && !productID.isNullOrBlank() && !productNum.isNullOrBlank()
@@ -375,7 +364,6 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         val name = edPayName?.text?.toString()
         val no = edPayAccount?.text?.toString()
         val bank = edPayBank?.text?.toString()
-        var payMethod = payType?.id
         if (amount.isNullOrBlank() || productID.isNullOrBlank()) {
             showToast("缺少机具信息，请重新选择机具")
             return
@@ -401,7 +389,7 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
             bank ?: "",
             voucherURL ?: "",
             "",
-            payMethod
+            payMethod!!
         )
     }
 
@@ -410,18 +398,6 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         showToast("订单提交成功")
         OrderListActivity.open(this)
         finish()
-    }
-
-    private fun showPayTypePicker() {
-        if (payTypePicker == null) {
-            payTypePicker = OptionPicker(this)
-            payTypePicker?.setTitle("打款方式")
-            payTypePicker?.setData(payTypeData)
-            payTypePicker?.setOnOptionPickedListener { position, _ ->
-                showPayTypeUI(payTypeData[position])
-            }
-        }
-        payTypePicker?.show()
     }
 
     private fun saveView(view: View) {
@@ -465,9 +441,4 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
             })
     }
 
-    class PayTypeBean(var id: String, var name: String) : TextProvider {
-        override fun provideText(): String {
-            return name
-        }
-    }
 }

@@ -6,12 +6,14 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.event.PaySuccessEvent
+import cn.dianyinhuoban.szg.mvp.PreviewImageActivity
 import cn.dianyinhuoban.szg.mvp.bean.OfflinePayInfoBean
 import cn.dianyinhuoban.szg.mvp.bean.UploadResultBean
 import cn.dianyinhuoban.szg.mvp.order.OrderListActivity
@@ -73,6 +75,7 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
     private var addressID: String = ""
     private var voucherURL: String? = null
     private var payMethod: String? = null
+    private var qrImgUrl: String? = null
 
     private var tvAmount: TextView? = null
     private var tvName: TextView? = null
@@ -91,9 +94,9 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
     private var alipayContainer: LinearLayout? = null
     private var bankContainer: LinearLayout? = null
 
-    private val qrDialog by lazy {
-        ImageDialog(this)
-    }
+//    private val qrDialog by lazy {
+//        ImageDialog(this)
+//    }
 
     override fun handleIntent(bundle: Bundle?) {
         super.handleIntent(bundle)
@@ -140,6 +143,10 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         btnSubmit?.setOnClickListener {
             submitOrder()
         }
+        val qrTitle =
+            "<font color=\"#999999\">支付宝收款码</font><font color=\"#C50018\">(长按收款码保存图片)</font>"
+        tvQRTitle?.text = Html.fromHtml(qrTitle)
+
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -159,7 +166,10 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
         edPayBank?.addTextChangedListener(textWatcher)
 
         ivQR?.setOnClickListener {
-            qrDialog.show()
+//            qrDialog.show()
+            qrImgUrl?.let {url->
+                PreviewImageActivity.open(this, arrayOf(url))
+            }
         }
         ivQR?.setOnLongClickListener { v ->
             v?.let {
@@ -202,8 +212,8 @@ class PayInfoActivity : BaseActivity<OfflinePayContract.Presenter?>(), OfflinePa
                         }
                     })
             }
-
-            qrDialog.setImagePath(payInfoBean?.aliPay)
+            qrImgUrl = payInfoBean?.aliPay
+//            qrDialog.setImagePath(payInfoBean?.aliPay)
         }
     }
 

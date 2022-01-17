@@ -10,6 +10,7 @@ import cn.dianyinhuoban.szg.CountdownTextUtils
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.bean.CustomModel
 import cn.dianyinhuoban.szg.bean.GiftInfoBean
+import cn.dianyinhuoban.szg.mvp.WebActivity
 import cn.dianyinhuoban.szg.mvp.WebHtmlActivity
 import cn.dianyinhuoban.szg.mvp.bean.AuthResult
 import cn.dianyinhuoban.szg.mvp.bean.BannerBean
@@ -131,12 +132,21 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
             mNoticeData?.let {
                 if (it.size > position) {
                     val model = it[position]
+
                     model?.let { customModel ->
-                        WebHtmlActivity.openWebHtmlActivity(
-                            requireContext(),
-                            customModel.title,
-                            customModel.content
-                        )
+                        if (customModel.url.isNullOrEmpty()) {
+                            WebActivity.openWebActivity(
+                                requireContext(),
+                                customModel.title,
+                                customModel.url
+                            )
+                        } else if (customModel.content.isNullOrEmpty()) {
+                            WebHtmlActivity.openWebHtmlActivity(
+                                requireContext(),
+                                customModel.title,
+                                customModel.content
+                            )
+                        }
                     }
                 }
             }
@@ -455,6 +465,7 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
             }
         }
     }
+
     override fun bindAuthResult(authResult: AuthResult) {
         when (authResult.status) {
             "0" -> {
@@ -468,6 +479,7 @@ class HomeFragment : BaseFragment<HomePresenter?>(), OnRefreshListener, HomeCont
             }
         }
     }
+
     override fun onDestroyView() {
         mBannerDialog?.let {
             if (it.isShowing) {

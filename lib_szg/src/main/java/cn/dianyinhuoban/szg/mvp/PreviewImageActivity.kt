@@ -1,11 +1,13 @@
 package cn.dianyinhuoban.szg.mvp
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
@@ -13,10 +15,18 @@ import cn.dianyinhuoban.szg.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.tbruyelle.rxpermissions2.RxPermissions
 import com.wareroom.lib_base.mvp.IPresenter
 import com.wareroom.lib_base.ui.BaseActivity
 import com.wareroom.lib_base.ui.adapter.SimpleAdapter
+import com.wareroom.lib_base.utils.BitmapUtils
 import com.wareroom.lib_base.utils.DimensionUtils
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class PreviewImageActivity : BaseActivity<IPresenter?>() {
     companion object {
@@ -109,7 +119,55 @@ class PreviewImageActivity : BaseActivity<IPresenter?>() {
                     }
 
                 })
+
+            viewHolder?.getView<TextView>(R.id.tv_save)?.setOnClickListener {
+                ivPreview?.let { iv ->
+                    saveView(iv)
+                }
+
+            }
         }
 
+    }
+
+    private fun saveView(view: View) {
+        RxPermissions(PreviewImageActivity@ this).request(
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ).subscribe { aBoolean: Boolean ->
+            if (aBoolean) {
+                saveView2File(view)
+            } else {
+                showToast("你尚未开启读写权限")
+            }
+        }
+    }
+
+    private fun saveView2File(view: View) {
+        showLoading()
+        Observable.just(view)
+            .map { v ->
+                val fileName = "DYHM${Calendar.getInstance().timeInMillis}.jpg"
+                BitmapUtils.saveBitmap(
+                    PreviewImageActivity@ this,
+                    BitmapUtils.view2Bitmap(v),
+                    fileName
+                )
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<String> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onNext(path: String) {
+                    hideLoading()
+                    showToast("图片保存至${path}")
+                }
+
+                override fun onError(e: Throwable) {
+                    hideLoading()
+                    showToast("图片保存失败")
+                }
+
+                override fun onComplete() {}
+            })
     }
 }

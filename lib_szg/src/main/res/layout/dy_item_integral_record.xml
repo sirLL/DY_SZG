@@ -10,34 +10,56 @@
     android:background="@drawable/dy_shape_ffffff_radius_6">
 
     <TextView
-        android:id="@+id/tv_sn"
+        android:id="@+id/tv_exchange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/shape_ea2618_radius_2"
+        android:includeFontPadding="false"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="4dp"
+        android:text="变现"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_amount"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_amount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="120dp"
+        android:layout_marginEnd="24dp"
+        android:text="--"
+        android:textColor="@color/color_333333"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_sn"
+        app:layout_constraintEnd_toStartOf="@id/tv_exchange"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="12dp"
+        tools:text="23131" />
+
+    <TextView
+        android:id="@+id/tv_sn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:ellipsize="middle"
         android:singleLine="true"
         android:text="--"
         android:textColor="@color/color_333333"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/tv_amount"
+        app:layout_constraintStart_toStartOf="@id/tv_amount"
+        app:layout_constraintTop_toBottomOf="@id/tv_amount"
         tools:text="SN:2995935235235232" />
 
-    <TextView
-        android:id="@+id/tv_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:text="--"
-        android:textColor="@color/color_333333"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="23131" />
 
     <TextView
         android:id="@+id/tv_date"
@@ -48,6 +70,7 @@
         android:text="--"
         android:textColor="@color/color_999999"
         android:textSize="12sp"
+        tools:text="2022-02-12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/tv_sn"
         app:layout_constraintStart_toStartOf="@id/tv_sn"

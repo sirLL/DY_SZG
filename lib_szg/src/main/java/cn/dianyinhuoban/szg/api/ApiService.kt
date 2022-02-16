@@ -527,4 +527,23 @@ interface ApiService {
     fun fetchIncomeRecordDetail(
         @Field("id") id: String
     ): Observable<Response<IncomeRecordDetailBean?>>
+
+
+    /**
+     * 积分变现
+     */
+    @FormUrlEncoded
+    @POST(URLConfig.URL_INTEGRAL_2_BALANCE)
+    fun submitIntegral2Balance(
+        @Field("id") recordID: String
+    ): Observable<Response<EmptyBean?>>
+
+    /**
+     * 积分明细
+     */
+    @FormUrlEncoded
+    @POST(URLConfig.URL_INTEGRAL_RECORD_DETAIL)
+    fun fetchIntegralRecordDetail(
+        @Field("id") id: String
+    ): Observable<Response<IntegralDetailBean?>>
 }

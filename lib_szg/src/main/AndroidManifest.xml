@@ -265,6 +265,10 @@
         <activity
             android:name=".payapi.alipay.AlipayActivity"
             android:screenOrientation="portrait" />
+        <!--    积分明细    -->
+        <activity
+            android:name=".mvp.income.view.IntegralDetailActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"

@@ -36,8 +36,12 @@ class ExchangeFragment :
     private var tvLeftIntegral: TextView? = null
     private var tvRightTitle: TextView? = null
     private var tvRightIntegral: TextView? = null
-    private var rlLeftContainer:RelativeLayout?=null
-    private var rlRightContainer:RelativeLayout?=null
+    private var rlLeftContainer: RelativeLayout? = null
+    private var rlRightContainer: RelativeLayout? = null
+    private var tvCenterTitle: TextView? = null
+    private var tvCenterIntegral: TextView? = null
+    private var rlCenterContainer: RelativeLayout? = null
+
 
     override fun getContentView(): Int {
         return R.layout.dy_fragment_exchange
@@ -59,16 +63,23 @@ class ExchangeFragment :
         super.initView(contentView)
         tvLeftTitle = contentView?.findViewById(R.id.tv_title_left)
         tvLeftIntegral = contentView?.findViewById(R.id.tv_amount_left)
+        tvCenterTitle = contentView?.findViewById(R.id.tv_title_center)
+        tvCenterIntegral = contentView?.findViewById(R.id.tv_amount_center)
         tvRightTitle = contentView?.findViewById(R.id.tv_title_right)
         tvRightIntegral = contentView?.findViewById(R.id.tv_amount_right)
-        rlLeftContainer=contentView?.findViewById(R.id.ll_left_container)
-        rlRightContainer=contentView?.findViewById(R.id.ll_right_container)
+        rlLeftContainer = contentView?.findViewById(R.id.ll_left_container)
+        rlRightContainer = contentView?.findViewById(R.id.ll_right_container)
+        rlCenterContainer = contentView?.findViewById(R.id.ll_center_container)
         rlLeftContainer?.setOnClickListener {
-            val machineType=it.getTag(R.id.dy_tv_tag) as String
+            val machineType = it.getTag(R.id.dy_tv_tag) as String
             IntegralRecordActivity.open(requireContext(), machineType)
         }
         rlRightContainer?.setOnClickListener {
-            val machineType=it.getTag(R.id.dy_tv_tag) as String
+            val machineType = it.getTag(R.id.dy_tv_tag) as String
+            IntegralRecordActivity.open(requireContext(), machineType)
+        }
+        rlCenterContainer?.setOnClickListener {
+            val machineType = it.getTag(R.id.dy_tv_tag) as String
             IntegralRecordActivity.open(requireContext(), machineType)
         }
     }
@@ -90,26 +101,32 @@ class ExchangeFragment :
             tvLeftIntegral?.text = "--"
             tvRightTitle?.text = "--"
             tvRightIntegral?.text = "--"
-            rlLeftContainer?.setTag(R.id.dy_tv_tag,"")
-            rlRightContainer?.setTag(R.id.dy_tv_tag,"")
+            rlLeftContainer?.setTag(R.id.dy_tv_tag, "")
+            rlRightContainer?.setTag(R.id.dy_tv_tag, "")
         } else {
             var leftBean: IntegralBalanceBean? = null
             var rightBean: IntegralBalanceBean? = null
+            var centerBean: IntegralBalanceBean? = null
             for (bean in data) {
-                if (leftBean == null) {
-                    leftBean = bean
-                } else if (rightBean == null) {
+                if (rightBean == null) {
                     rightBean = bean
+                } else if (centerBean == null) {
+                    centerBean = bean
+                } else if (leftBean == null) {
+                    leftBean = bean
                 } else {
                     break
                 }
             }
             tvLeftTitle?.text = leftBean?.name
             tvLeftIntegral?.text = NumberUtils.formatMoney(leftBean?.point)
+            tvCenterTitle?.text = centerBean?.name
+            tvCenterIntegral?.text = NumberUtils.formatMoney(centerBean?.point)
             tvRightTitle?.text = rightBean?.name
             tvRightIntegral?.text = NumberUtils.formatMoney(rightBean?.point)
-            rlLeftContainer?.setTag(R.id.dy_tv_tag,leftBean?.machineTypeId?:"")
-            rlRightContainer?.setTag(R.id.dy_tv_tag,rightBean?.machineTypeId?:"")
+            rlLeftContainer?.setTag(R.id.dy_tv_tag, leftBean?.machineTypeId ?: "")
+            rlRightContainer?.setTag(R.id.dy_tv_tag, rightBean?.machineTypeId ?: "")
+            rlCenterContainer?.setTag(R.id.dy_tv_tag, centerBean?.machineTypeId ?: "")
         }
 
     }

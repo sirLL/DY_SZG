@@ -109,6 +109,7 @@ class WithdrawBalancePicker : BaseBottomPicker<BalanceTypeBean, IPresenter?>() {
 
     override fun request(page: Int) {
         val data = mutableListOf<BalanceTypeBean>()
+        data.add(BalanceTypeBean("3", "个人收益"))
         data.add(BalanceTypeBean("2", "激活返现"))
         data.add(BalanceTypeBean("1", "其他收益"))
         loadData(data)

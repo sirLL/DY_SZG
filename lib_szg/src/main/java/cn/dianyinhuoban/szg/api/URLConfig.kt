@@ -203,14 +203,19 @@ interface URLConfig {
         const val URL_INTEGRAL_RECORD = "machinenew_pointLog.html"
 
         //生日红包
-        const val URL_GIFT_INFO="user_userBirthday.html"
+        const val URL_GIFT_INFO = "user_userBirthday.html"
 
         //领取红包
-        const val URL_GIFT_GET="user_birthdayOpen.html"
+        const val URL_GIFT_GET = "user_birthdayOpen.html"
 
         //分润详情
-        const val URL_INCOME_RECORD_DETAIL="bill_billInfo.html"
+        const val URL_INCOME_RECORD_DETAIL = "bill_billInfo.html"
 
+        //积分变现
+        const val URL_INTEGRAL_2_BALANCE = "machineNew_pointToBalance.html"
+
+        //积分明细
+        const val URL_INTEGRAL_RECORD_DETAIL = "machineNew_pointDetail.html"
 
     }
 

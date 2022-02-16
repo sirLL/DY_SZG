@@ -25,19 +25,19 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="32dp"
-                    android:background="@drawable/dy_img_exchange_header_bg">
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/shape_ea2618_radius_8">
 
                     <RelativeLayout
                         android:id="@+id/ll_left_container"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:orientation="vertical"
-                        app:layout_constraintDimensionRatio="h,3:2"
-                        app:layout_constraintEnd_toStartOf="@id/view_center"
-                        app:layout_constraintHorizontal_weight="7"
+                        app:layout_constraintDimensionRatio="h,3:3"
+                        app:layout_constraintEnd_toStartOf="@id/divider_1"
+                        app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -51,7 +51,7 @@
                             android:paddingEnd="10dp"
                             android:singleLine="true"
                             android:textColor="@color/white"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             tools:text="出票积分" />
 
                         <TextView
@@ -79,30 +79,96 @@
                             android:paddingStart="10dp"
                             android:paddingEnd="10dp"
                             android:singleLine="true"
+                            android:text="查看明细"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:text="查看明细" />
+                            android:textSize="12sp" />
                     </RelativeLayout>
 
                     <View
-                        android:id="@+id/view_center"
+                        android:id="@+id/divider_1"
+                        android:layout_width="1dp"
+                        android:layout_height="60dp"
+                        android:alpha="0.1"
+                        android:background="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ll_left_container"
+                        app:layout_constraintEnd_toStartOf="@id/ll_center_container"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RelativeLayout
+                        android:id="@+id/ll_center_container"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        app:layout_constraintBottom_toBottomOf="@id/ll_left_container"
-                        app:layout_constraintEnd_toStartOf="@id/ll_right_container"
+                        android:orientation="vertical"
+                        app:layout_constraintDimensionRatio="h,3:3"
+                        app:layout_constraintEnd_toStartOf="@id/divider_2"
                         app:layout_constraintHorizontal_weight="1"
-                        app:layout_constraintStart_toEndOf="@id/ll_left_container"
-                        app:layout_constraintTop_toTopOf="@id/ll_left_container" />
+                        app:layout_constraintStart_toEndOf="@id/divider_1"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/tv_title_center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_horizontal"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            tools:text="出票积分" />
+
+                        <TextView
+                            android:id="@+id/tv_amount_center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:gravity="center_horizontal"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            app:autoSizeMaxTextSize="20sp"
+                            app:autoSizeMinTextSize="14sp"
+                            app:autoSizeTextType="uniform"
+                            tools:text="777" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="12dp"
+                            android:gravity="center_horizontal"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:text="查看明细"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+
+                    <View
+                        android:id="@+id/divider_2"
+                        android:layout_width="1dp"
+                        android:layout_height="60dp"
+                        android:alpha="0.1"
+                        android:background="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ll_center_container"
+                        app:layout_constraintEnd_toStartOf="@id/ll_right_container"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <RelativeLayout
                         android:id="@+id/ll_right_container"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:orientation="vertical"
-                        app:layout_constraintDimensionRatio="h,3:2"
+                        app:layout_constraintDimensionRatio="h,3:3"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_weight="7"
-                        app:layout_constraintStart_toEndOf="@id/view_center"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@id/divider_2"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
@@ -115,7 +181,7 @@
                             android:paddingEnd="10dp"
                             android:singleLine="true"
                             android:textColor="@color/white"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             tools:text="出票积分" />
 
                         <TextView
@@ -143,9 +209,9 @@
                             android:paddingStart="10dp"
                             android:paddingEnd="10dp"
                             android:singleLine="true"
+                            android:text="查看明细"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:text="查看明细" />
+                            android:textSize="12sp" />
                     </RelativeLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

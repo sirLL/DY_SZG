@@ -25,6 +25,7 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
     private var mCheckedBankCard: BankBean? = null
     private var mOtherBalance: Double = 0.0
     private var mActivationBalance: Double = 0.0
+    private var mPersonalBalance: Double = 0.0
     private var mWithdrawTypePicker: WithdrawTypePicker? = null
     private var mBalanceType: BalanceTypeBean? = null
     private var mWithdrawBalancePicker: WithdrawBalancePicker? = null
@@ -59,6 +60,9 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
                 }
                 "2" -> {
                     NumberUtils.numberScale(mActivationBalance)
+                }
+                "3" -> {
+                    NumberUtils.numberScale(mPersonalBalance)
                 }
                 else -> {
                     NumberUtils.numberScale(0.0)
@@ -176,6 +180,9 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
             "2" -> {
                 mActivationBalance
             }
+            "3" -> {
+                mPersonalBalance
+            }
             else -> {
                 0.0
             }
@@ -205,6 +212,11 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
         } else {
             other
         }
+        mPersonalBalance = if (TextUtils.isEmpty(personalBean?.personal)) {
+            0.0
+        } else {
+            NumberUtils.numberScale(personalBean?.personal).toDouble()
+        }
         bindBalance()
     }
 
@@ -215,6 +227,9 @@ class WithdrawActivity : BaseActivity<WithdrawPresenter?>(), WithdrawContract.Vi
             }
             "2" -> {
                 NumberUtils.numberScale(mActivationBalance)
+            }
+            "3" -> {
+                NumberUtils.numberScale(mPersonalBalance)
             }
             else -> {
                 NumberUtils.numberScale(0.0)

@@ -190,7 +190,7 @@ class ExchangeFragment :
                 if (title.isNotBlank()) {
                     title.append("&thinsp;+&thinsp;")
                 }
-                title.append("<font color='red'>${NumberUtils.formatMoney(itemData?.machine?.back_point)}</font>&thinsp;购机积分")
+                title.append("<font color='red'>${NumberUtils.formatMoney(itemData?.machine?.back_point)}</font>&thinsp;积分")
             }
             if (!itemData?.machine?.back_point.isNullOrBlank()) {
                 if (title.isNotBlank()) {

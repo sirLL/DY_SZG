@@ -130,6 +130,6 @@ dependencies {
 ext {
     PUBLISH_GROUP_ID = "io.github.sirll"        //项目包名
     PUBLISH_ARTIFACT_ID = 'lib_szg'            //项目名
-    PUBLISH_VERSION = "1.1.12"                   //版本号
+    PUBLISH_VERSION = "1.1.13"                   //版本号
 }
 apply from: '../publish-mavencentral.gradle'

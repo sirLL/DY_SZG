@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        CrashReport.initCrashReport(getApplicationContext(), "8dada2cf07", false);
         DYHelper.getInstance().init(this).setOnCheckVersionCallback(new DYHelper.OnCheckVersionCallback() {
             @Override
             public LinkedHashMap<String, String> getFetchVersionHeader() {

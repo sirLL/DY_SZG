@@ -10,12 +10,12 @@ import androidx.core.content.ContextCompat
 import cn.dianyinhuoban.szg.R
 import cn.dianyinhuoban.szg.mvp.bean.MemberDetailBean
 import cn.dianyinhuoban.szg.mvp.bean.TeamMemberBean
-import cn.dianyinhuoban.szg.mvp.machine.view.MachineTransferActivity
 import cn.dianyinhuoban.szg.mvp.machine.view.TransferActivity
 import cn.dianyinhuoban.szg.mvp.me.contract.MemberInfoContract
 import cn.dianyinhuoban.szg.mvp.me.presenter.MemberInfoPresenter
 import cn.dianyinhuoban.szg.mvp.me.view.adapter.MemberBarchartAdapter
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.github.gzuliyujiang.wheelpicker.DatePicker
 import com.github.gzuliyujiang.wheelpicker.annotation.DateMode
 import com.github.gzuliyujiang.wheelpicker.entity.DateEntity
@@ -186,11 +186,11 @@ class MemberInfoActivity : BaseActivity<MemberInfoPresenter?>(), MemberInfoContr
         mMemberDetailBean = memberDetail
         refresh_layout.finishRefresh()
         mAdapter?.data = memberDetail?.purchaseList
-
         iv_avatar.load(memberDetail?.avatar ?: "") {
-            crossfade(true)
             error(R.drawable.dy_img_avatar_def)
             placeholder(R.drawable.dy_img_avatar_def)
+            transformations(CircleCropTransformation())
+            crossfade(true)
         }
         tv_name.text = if (!TextUtils.isEmpty(memberDetail?.name)) {
             memberDetail?.name

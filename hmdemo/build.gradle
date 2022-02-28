@@ -45,4 +45,5 @@ dependencies {
 
 //    implementation "io.github.sirll:lib_szg:1.1.13"
     implementation project(':lib_szg')
+    implementation 'com.tencent.bugly:crashreport:latest.release'
 }
